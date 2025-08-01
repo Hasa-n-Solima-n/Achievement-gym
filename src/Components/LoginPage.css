@@ -1,0 +1,248 @@
+:root {
+    --primary-text-color: #333;
+    --secondary-text-color: #666;
+    --input-border-color: #ccc;
+    --button-bg-color: #eee;
+    --button-text-color: #333;
+    --dark-button-bg: #000;
+    --dark-button-text: #fff;
+    --background-light: #f0f0f0;
+    --background-gradient-start: #f8f8f8;
+    --background-gradient-end: #e8e8e8;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    /* تأكد من استيراد هذا الخط أو استخدم خطًا عامًا */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* تأكد من أن الصفحة تأخذ كامل الارتفاع */
+    background-color: var(--background-light);
+    /* لون خلفية بسيط للصفحة */
+    box-sizing: border-box;
+    /* لضمان أن الحشوة والحدود لا تزيد عن عرض العنصر */
+}
+
+.login-container {
+    display: flex;
+    width: 900px;
+    /* عرض تقريبي للشاشة الكاملة */
+    max-width: 95vw;
+    /* ليكون مستجيبًا على الشاشات الأصغر، ولكنه يستقر على 900px */
+    min-height: 600px;
+    /* ارتفاع تقريبي */
+    background-color: #fff;
+    /* خلفية بيضاء عامة للحاوية */
+    border-radius: 20px;
+    overflow: hidden;
+    /* لضمان أن الصورة ذات الزوايا المستديرة لا تتجاوز الحدود */
+    box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+/* القسم الأيسر - الصورة */
+.login-image-section {
+    flex: 1;
+    /* يأخذ المساحة المتاحة بالتساوي */
+    background-color: #000;
+    /* خلفية سوداء للقسام */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    /* لجعل الصورة تظهر بعيدًا عن الحواف قليلاً */
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.login-hero-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    /* تأكد من أن الصورة تتناسب داخل المساحة مع الحفاظ على نسبتها */
+    object-position: center;
+    /* وضع الصورة في المنتصف */
+    border-radius: 20px;
+    /* الزاوية المستديرة للصورة داخل القسم الأسود */
+}
+
+/* القسم الأيمن - نموذج تسجيل الدخول */
+.login-form-section {
+    flex: 1;
+    /* يأخذ المساحة المتاحة بالتساوي */
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    background: linear-gradient(180deg, var(--background-gradient-start), var(--background-gradient-end));
+    justify-content: space-between;
+    /* لتوزيع المحتوى رأسيًا */
+    border-top-right-radius: 20px;
+    /* ضمان الزوايا الصحيحة */
+    border-bottom-right-radius: 20px;
+}
+
+.login-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.login-header h2 {
+    font-size: 2.5em;
+    color: var(--primary-text-color);
+    margin: 0;
+}
+
+.bake-button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: 1px solid var(--input-border-color);
+    padding: 8px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.bake-button:hover {
+    background-color: #ddd;
+    transform: translateY(-1px);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* لجعل النموذج يأخذ المساحة المتاحة */
+    justify-content: center;
+    /* لمحاذاة حقول النموذج في المنتصف الرأسي ضمن المساحة المتاحة */
+}
+
+.input-group {
+    margin-bottom: 15px;
+    /* مسافة بين مجموعات الإدخال */
+}
+
+.input-label {
+    font-size: 1em;
+    color: var(--primary-text-color);
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    display: block;
+    /* لجعل التسمية تأخذ سطرًا كاملاً */
+}
+
+.login-input {
+    width: 100%;
+    /* اجعله يأخذ العرض الكامل للمجموعة */
+    padding: 15px 20px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 10px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* ظل داخلي خفيف */
+    outline: none;
+    /* إزالة الخط الأزرق عند التركيز */
+    box-sizing: border-box;
+    /* لضمان أن الحشوة والحدود لا تزيد عن عرض العنصر */
+}
+
+.login-input:focus {
+    border-color: #777;
+    /* تغيير لون الحدود عند التركيز */
+    box-shadow: 0 0 0 3px rgba(119, 119, 119, 0.2);
+}
+
+.forgot-password {
+    align-self: flex-end;
+    /* لمحاذاة الرابط إلى اليمين */
+    font-size: 0.9em;
+    color: var(--secondary-text-color);
+    text-decoration: none;
+    margin-bottom: 30px;
+    margin-top: 15px;
+    transition: color 0.3s ease;
+}
+.forgot-password:hover {
+    color: var(--primary-text-color);
+    text-decoration: underline;
+}
+
+.start-button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 30px;
+    /* مسافة من حقل كلمة المرور */
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transition: all 0.3s ease;
+    width: 100%;
+    /* لجعله يأخذ العرض الكامل */
+    box-sizing: border-box;
+}
+
+.start-button:hover {
+    background-color: #ddd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px var(--shadow-color);
+}
+
+.login-footer {
+    display: flex;
+    justify-content: center;
+    /* لمحاذاة الأزرار في المنتصف */
+    gap: 20px;
+    /* مسافة بين الأزرار */
+    margin-top: auto;
+    /* لدفع الأزرار إلى الأسفل */
+    padding-top: 30px;
+    /* مسافة من زر "ابدأ" */
+}
+
+.signup-button,
+.login-button {
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    /* لتوفير حد أدنى للعرض */
+    text-align: center;
+    /* للتأكد من توسيط النص إذا كان الزر أوسع */
+}
+
+.signup-button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: 1px solid var(--input-border-color);
+}
+
+.signup-button:hover {
+    background-color: #ddd;
+}
+
+.login-button {
+    background-color: var(--dark-button-bg);
+    color: var(--dark-button-text);
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}

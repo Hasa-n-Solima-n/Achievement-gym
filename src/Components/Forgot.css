@@ -1,0 +1,172 @@
+/* src/components/ForgotPassword.css */
+
+/* المتغيرات الأساسية */
+:root {
+    --primary-text-color: #333;
+    --secondary-text-color: #666;
+    --input-border-color: #ccc;
+    --button-bg-color: #eee;
+    --button-text-color: #333;
+    --dark-button-bg: #000;
+    --dark-button-text: #fff;
+    --background-light: #f0f0f0;
+    --background-gradient-start: #f8f8f8;
+    --background-gradient-end: #e8e8e8;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background-light);
+    box-sizing: border-box;
+}
+
+.reset-password-container {
+    display: flex;
+    width: 900px;
+    max-width: 95vw;
+    min-height: 600px;
+    background-color: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+/* القسم الأيسر - الصورة */
+.reset-password-image-section {
+    flex: 1;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.reset-password-hero-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 20px;
+}
+
+/* القسم الأيمن - النموذج */
+.reset-password-form-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: linear-gradient(180deg, var(--background-gradient-start), var(--background-gradient-end));
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+    /* لتمكين وضع زر Bake في الزاوية */
+}
+
+/* زر Bake في الزاوية العلوية اليمنى */
+.header-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.bake-button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: 1px solid var(--input-border-color);
+    padding: 8px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.bake-button:hover {
+    background-color: #ddd;
+    transform: translateY(-1px);
+}
+
+/* محتوى النموذج الرئيسي */
+.form-content {
+    margin: 0 auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* لتوسيط المحتوى رأسيًا */
+    align-items: stretch;
+    /* لمحاذاة المحتوى إلى اليسار */
+    padding-top: 50px;
+    /* مسافة من زر Bake */
+    width: 100%;
+}
+
+.form-title {
+    font-size: 2.5em;
+    color: var(--primary-text-color);
+    margin: 0;
+}
+
+.form-subtitle {
+    font-size: 1em;
+    color: var(--secondary-text-color);
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+.input-group {
+    width: max-content;
+    margin-bottom: 20px;
+}
+
+.input-label {
+    display: block;
+    font-size: 1em;
+    color: var(--primary-text-color);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 10px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    border-color: #777;
+    box-shadow: 0 0 0 3px rgba(119, 119, 119, 0.2);
+}
+.next-button {
+    width: 100%;
+    background-color: var(--dark-button-bg);
+    color: var(--dark-button-text);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.next-button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
