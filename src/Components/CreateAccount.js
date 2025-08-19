@@ -203,10 +203,6 @@ const ProfileInfoStep = ({
       <button type="submit" className="start-button">
         Start
       </button>
-      BACK
-      <button type="button" onClick={prevStep}>
-        Back
-      </button>
     </form>
   </div>
 );
