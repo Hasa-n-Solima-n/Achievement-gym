@@ -6,54 +6,54 @@
     --button-text-color: #333;
     --dark-button-bg: #000;
     --dark-button-text: #fff;
-    --background-light: #f0f0f0;
-    --background-gradient-start: #f8f8f8;
-    --background-gradient-end: #e8e8e8;
+    --background-light: #2c2c2e;
+    /* --background-gradient-start: #f8f8f8; */
+    /* --background-gradient-end: #e8e8e8; */
     --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    /* تأكد من استيراد هذا الخط أو استخدم خطًا عامًا */
+    /* Ensure this font is imported or use a generic one */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* تأكد من أن الصفحة تأخذ كامل الارتفاع */
+    /* Ensure the page takes up the full viewport height */
     background-color: var(--background-light);
-    /* لون خلفية بسيط للصفحة */
+    /* Simple background color for the page */
     box-sizing: border-box;
-    /* لضمان أن الحشوة والحدود لا تزيد عن عرض العنصر */
+    /* To ensure padding and borders do not increase the element's width */
 }
 
 .login-container {
     display: flex;
     width: 900px;
-    /* عرض تقريبي للشاشة الكاملة */
+    /* Approximate width for a full-screen view */
     max-width: 95vw;
-    /* ليكون مستجيبًا على الشاشات الأصغر، ولكنه يستقر على 900px */
+    /* To be responsive on smaller screens, but settles at 900px */
     min-height: 600px;
-    /* ارتفاع تقريبي */
+    /* Approximate height */
     background-color: #fff;
-    /* خلفية بيضاء عامة للحاوية */
+    /* General white background for the container */
     border-radius: 20px;
     overflow: hidden;
-    /* لضمان أن الصورة ذات الزوايا المستديرة لا تتجاوز الحدود */
+    /* To ensure the rounded corners of the image don't overflow */
     box-shadow: 0 10px 30px var(--shadow-color);
 }
 
-/* القسم الأيسر - الصورة */
+/* Left Section - Image */
 .login-image-section {
     flex: 1;
-    /* يأخذ المساحة المتاحة بالتساوي */
+    /* Takes up equal available space */
     background-color: #000;
-    /* خلفية سوداء للقسام */
+    /* Black background for the section */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    /* لجعل الصورة تظهر بعيدًا عن الحواف قليلاً */
+    /* To make the image slightly inset from the edges */
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
 }
@@ -63,25 +63,25 @@ body {
     height: auto;
     display: block;
     object-fit: contain;
-    /* تأكد من أن الصورة تتناسب داخل المساحة مع الحفاظ على نسبتها */
+    /* Ensures the image fits inside while maintaining its aspect ratio */
     object-position: center;
-    /* وضع الصورة في المنتصف */
+    /* Centers the image */
     border-radius: 20px;
-    /* الزاوية المستديرة للصورة داخل القسم الأسود */
+    /* Rounded corners for the image inside the black section */
 }
 
-/* القسم الأيمن - نموذج تسجيل الدخول */
+/* Right Section - Login Form */
 .login-form-section {
     flex: 1;
-    /* يأخذ المساحة المتاحة بالتساوي */
+    /* Takes up equal available space */
     display: flex;
     flex-direction: column;
     padding: 40px;
     background: linear-gradient(180deg, var(--background-gradient-start), var(--background-gradient-end));
     justify-content: space-between;
-    /* لتوزيع المحتوى رأسيًا */
+    /* Distributes content vertically */
     border-top-right-radius: 20px;
-    /* ضمان الزوايا الصحيحة */
+    /* Ensures correct corners */
     border-bottom-right-radius: 20px;
 }
 
@@ -118,14 +118,14 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    /* لجعل النموذج يأخذ المساحة المتاحة */
+    /* Makes the form take up available space */
     justify-content: center;
-    /* لمحاذاة حقول النموذج في المنتصف الرأسي ضمن المساحة المتاحة */
+    /* Aligns form fields vertically in the available space */
 }
 
 .input-group {
     margin-bottom: 15px;
-    /* مسافة بين مجموعات الإدخال */
+    /* Spacing between input groups */
 }
 
 .input-label {
@@ -135,33 +135,33 @@ body {
     margin-bottom: 8px;
     font-weight: 500;
     display: block;
-    /* لجعل التسمية تأخذ سطرًا كاملاً */
+    /* Makes the label take a full line */
 }
 
 .login-input {
     width: 100%;
-    /* اجعله يأخذ العرض الكامل للمجموعة */
+    /* Makes it take the full width of the group */
     padding: 15px 20px;
     border: 1px solid var(--input-border-color);
     border-radius: 10px;
     font-size: 1em;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* ظل داخلي خفيف */
+    /* Light inner shadow */
     outline: none;
-    /* إزالة الخط الأزرق عند التركيز */
+    /* Removes the blue outline on focus */
     box-sizing: border-box;
-    /* لضمان أن الحشوة والحدود لا تزيد عن عرض العنصر */
+    /* Ensures padding and borders do not increase the element's width */
 }
 
 .login-input:focus {
     border-color: #777;
-    /* تغيير لون الحدود عند التركيز */
+    /* Change border color on focus */
     box-shadow: 0 0 0 3px rgba(119, 119, 119, 0.2);
 }
 
 .forgot-password {
     align-self: flex-end;
-    /* لمحاذاة الرابط إلى اليمين */
+    /* Aligns the link to the right */
     font-size: 0.9em;
     color: var(--secondary-text-color);
     text-decoration: none;
@@ -169,6 +169,7 @@ body {
     margin-top: 15px;
     transition: color 0.3s ease;
 }
+
 .forgot-password:hover {
     color: var(--primary-text-color);
     text-decoration: underline;
@@ -183,12 +184,12 @@ body {
     font-size: 1.1em;
     font-weight: bold;
     cursor: pointer;
-    margin-top: 30px;
-    /* مسافة من حقل كلمة المرور */
+    margin-top: 10px;
+    /* Spacing from the password field */
     box-shadow: 0 4px 10px var(--shadow-color);
     transition: all 0.3s ease;
     width: 100%;
-    /* لجعله يأخذ العرض الكامل */
+    /* To make it take the full width */
     box-sizing: border-box;
 }
 
@@ -198,16 +199,23 @@ body {
     box-shadow: 0 6px 15px var(--shadow-color);
 }
 
+.start-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 .login-footer {
     display: flex;
     justify-content: center;
-    /* لمحاذاة الأزرار في المنتصف */
+    /* To align buttons in the center */
     gap: 20px;
-    /* مسافة بين الأزرار */
+    /* Spacing between buttons */
     margin-top: auto;
-    /* لدفع الأزرار إلى الأسفل */
+    /* Pushes buttons to the bottom */
     padding-top: 30px;
-    /* مسافة من زر "ابدأ" */
+    /* Spacing from the 'Start' button */
 }
 
 .signup-button,
@@ -219,9 +227,9 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     min-width: 120px;
-    /* لتوفير حد أدنى للعرض */
+    /* To provide a minimum width */
     text-align: center;
-    /* للتأكد من توسيط النص إذا كان الزر أوسع */
+    /* To ensure text is centered if the button is wider */
 }
 
 .signup-button {
@@ -245,4 +253,11 @@ body {
     background-color: #333;
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.error-message {
+    color: #d9534f;
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+    text-align: center;
 }

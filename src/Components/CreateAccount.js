@@ -1,9 +1,11 @@
 // src/components/CreateAccount.jsx
 
-import React, { useState } from "react";
-import "./CreateAccount.css"; // استيراد ملف CSS
+import React, { useState, useEffect } from "react";
+import "./CreateAccount.css"; 
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-// المكون الأول: معلومات الحساب
+const COACHES_ENDPOINT = "https://your-api-url.com/coaches";
+
 const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
   <div className="form-content">
     <h2 className="form-title">Create Account</h2>
@@ -111,103 +113,180 @@ const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
   </div>
 );
 
-// المكون الثاني: معلومات الملف الشخصي
 const ProfileInfoStep = ({
   prevStep,
   handleSubmit,
   formData,
   handleChange,
-}) => (
-  <div className="form-content">
-    <h2 className="form-title">Create Account</h2>
-    <p className="form-subtitle">Profile Information</p>
+}) => {
+  const [coaches, setCoaches] = useState([]);
+  const [loadingCoaches, setLoadingCoaches] = useState(false);
+  const [coachesError, setCoachesError] = useState("");
 
-    <form className="profile-info-form" onSubmit={handleSubmit}>
-      <div className="input-group">
-        <label htmlFor="sportType" className="input-label">
-          Sport Type
-        </label>
-        <select
-          id="sportType"
-          name="sportType"
-          className="form-input"
-          value={formData.sportType}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select a sport</option>
-          <option value="fitness">Fitness</option>
-          <option value="running">Running</option>
-          <option value="swimming">Swimming</option>
-          {/* يمكن إضافة المزيد من الخيارات هنا */}
-        </select>
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchCoaches = async () => {
+      if (formData.userType !== "gymMember") return;
+      setLoadingCoaches(true);
+      setCoachesError("");
+      try {
+        const response = await fetch(COACHES_ENDPOINT);
+        if (!response.ok) throw new Error("Failed to load coaches");
+        const data = await response.json();
+        const list =
+          (data && data.data && (data.data.coaches || data.data)) ||
+          data.coaches ||
+          data ||
+          [];
+        const normalized = Array.isArray(list)
+          ? list.map((c, idx) => {
+              if (typeof c === "string") return { id: c, name: c };
+              const id = c.id || c._id || c.userId || idx;
+              const name =
+                c.name ||
+                [c.firstName, c.lastName].filter(Boolean).join(" ") ||
+                c.email ||
+                String(id);
+              return { id, name };
+            })
+          : [];
+        if (!isCancelled) setCoaches(normalized);
+      } catch (err) {
+        if (!isCancelled) setCoachesError("Could not load coaches");
+      } finally {
+        if (!isCancelled) setLoadingCoaches(false);
+      }
+    };
+    fetchCoaches();
+    return () => {
+      isCancelled = true;
+    };
+  }, [formData.userType]);
+
+  return (
+    <div className="form-content">
+      <div className="header-button">
+        <button className="bake-button" onClick={prevStep}>
+          Back
+        </button>
       </div>
-      <div className="input-group">
-        <label htmlFor="bio" className="input-label">
-          Bio
-        </label>
-        <textarea
-          id="bio"
-          name="bio"
-          className="form-input textarea-input"
-          value={formData.bio}
-          onChange={handleChange}
-          maxLength="500"
-          placeholder="Tell us about yourself..."
-        ></textarea>
-        <span className="char-count">{formData.bio.length}/500</span>
-      </div>
-      <div className="input-group">
-        <label htmlFor="image" className="input-label">
-          Image
-        </label>
-        <div className="file-input-wrapper">
-          <input
-            type="file"
-            id="image"
-            name="image"
-            className="file-input"
+      <h2 className="form-title">Create Account</h2>
+      <p className="form-subtitle">Profile Information</p>
+
+      <form className="profile-info-form" onSubmit={handleSubmit}>
+        <div className="input-group">
+          <label htmlFor="sportType" className="input-label">
+            Sport Type
+          </label>
+          <select
+            id="sportType"
+            name="sportType"
+            className="form-input"
+            value={formData.sportType}
             onChange={handleChange}
-          />
-          <label htmlFor="image" className="file-input-label">
-            <span>Choose File</span>
-            <span className="upload-icon">
-              {/* يمكن استبدال هذا بأيقونة SVG */}
-              &#8682;
-            </span>
+            required
+          >
+            <option value="">Select a sport</option>
+            <option value="fitness">Fitness</option>
+            <option value="running">Running</option>
+            <option value="swimming">Swimming</option>
+          </select>
+        </div>
+        <div className="input-group">
+          <label htmlFor="bio" className="input-label">
+            Bio
+          </label>
+          <textarea
+            id="bio"
+            name="bio"
+            className="form-input textarea-input"
+            value={formData.bio}
+            onChange={handleChange}
+            maxLength="500"
+            placeholder="Tell us about yourself..."
+          ></textarea>
+          <span className="char-count">{formData.bio.length}/500</span>
+        </div>
+        <div className="input-group">
+          <label htmlFor="image" className="input-label">
+            Image
+          </label>
+          <div className="file-input-wrapper">
+            <input
+              type="file"
+              id="image"
+              name="image"
+              className="file-input"
+              onChange={handleChange}
+            />
+            <label htmlFor="image" className="file-input-label">
+              <span>Choose File</span>
+              <span className="upload-icon">&#8682;</span>
+            </label>
+          </div>
+        </div>
+        <div className="radio-group">
+          <label className="radio-label">
+            <input
+              type="radio"
+              name="userType"
+              value="coach"
+              checked={formData.userType === "coach"}
+              onChange={handleChange}
+            />
+            <span className="radio-text">Coach</span>
+          </label>
+          <label className="radio-label">
+            <input
+              type="radio"
+              name="userType"
+              value="gymMember"
+              checked={formData.userType === "gymMember"}
+              onChange={handleChange}
+            />
+            <span className="radio-text">Gym Member</span>
           </label>
         </div>
-      </div>
-      <div className="radio-group">
-        <label className="radio-label">
-          <input
-            type="radio"
-            name="userType"
-            value="coach"
-            checked={formData.userType === "coach"}
-            onChange={handleChange}
-          />
-          <span className="radio-text">Coach</span>
-        </label>
-        <label className="radio-label">
-          <input
-            type="radio"
-            name="userType"
-            value="gymMember"
-            checked={formData.userType === "gymMember"}
-            onChange={handleChange}
-          />
-          <span className="radio-text">Gym Member</span>
-        </label>
-      </div>
-      <button type="submit" className="start-button">
-        Start
-      </button>
-    </form>
-  </div>
-);
+        {formData.userType === "gymMember" && (
+          <div className="input-group">
+            <label htmlFor="coachId" className="input-label">
+              Coach
+            </label>
+            <select
+              id="coachId"
+              name="coachId"
+              className="form-input"
+              value={formData.coachId || ""}
+              onChange={handleChange}
+              required
+              disabled={loadingCoaches}
+            >
+              <option value="">
+                {loadingCoaches ? "Loading coaches..." : "Select a coach"}
+              </option>
+              {!loadingCoaches &&
+                coaches.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+            </select>
+            {coachesError && (
+              <span className="char-count" style={{ color: "#e74c3c" }}>
+                {coachesError}
+              </span>
+            )}
+          </div>
+        )}
 
-// المكون الرئيسي الذي يدمج كل شيء
+        <button type="submit" className="start-button">
+          Start
+        </button>
+      </form>
+    </div>
+  );
+};
+
 function CreateAccount() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -220,7 +299,8 @@ function CreateAccount() {
     sportType: "",
     bio: "",
     image: null,
-    userType: "gymMember", // قيمة افتراضية
+    userType: "gymMember",
+    coachId: "",
   });
 
   const handleChange = (e) => {
@@ -234,7 +314,7 @@ function CreateAccount() {
   const nextStep = (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("كلمة المرور وتأكيدها غير متطابقين!");
+      alert("You have entered two different passwords");
       return;
     }
     setStep(2);
@@ -244,14 +324,18 @@ function CreateAccount() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // هنا يتم إرسال formData إلى الواجهة الخلفية
-    console.log("بيانات الحساب الكاملة:", formData);
-    alert("تم إنشاء الحساب بنجاح!");
+    //to bu hammodi backend legend
+    console.log("All form data", formData);
+    alert("Account created successfully");
+  };
+
+  const navigate = useHistory();
+  const handleBackClick = () => {
+    navigate.push("/login");
   };
 
   return (
     <div className="create-account-container">
-      {/* القسم الأيسر - الصورة */}
       <div className="create-account-image-section">
         <img
           src="photo_2025-08-01_16-49-36.jpg"
@@ -260,12 +344,7 @@ function CreateAccount() {
         />
       </div>
 
-      {/* القسم الأيمن - النموذج */}
       <div className="create-account-form-section">
-        <div className="header-button">
-          <button className="bake-button">Bake</button>
-        </div>
-
         {step === 1 ? (
           <AccountInfoStep
             nextStep={nextStep}
@@ -283,7 +362,9 @@ function CreateAccount() {
 
         <div className="login-footer">
           <button className="signup-button">Sign Up</button>
-          <button className="login-button">Login</button>
+          <button className="login-button" onClick={handleBackClick}>
+            Login
+          </button>
         </div>
       </div>
     </div>

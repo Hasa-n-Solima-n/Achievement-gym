@@ -327,24 +327,24 @@ body {
 }
 
 .signup-button {
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    border: 1px solid var(--input-border-color);
-}
-
-.signup-button:hover {
-    background-color: #ddd;
-}
-
-.login-button {
     background-color: var(--dark-button-bg);
     color: var(--dark-button-text);
     border: none;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.login-button:hover {
+.signup-button:hover {
     background-color: #333;
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.login-button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: 1px solid var(--input-border-color);
+}
+
+.login-button:hover {
+    background-color: #ddd;
 }

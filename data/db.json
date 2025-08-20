@@ -1,0 +1,22 @@
+{
+  "gymMembers": [
+    {
+      "memberId": 5,
+      "firstName": "Ali",
+      "lastName": "Ibrahim",
+      "imageUrl": "https://placehold.co/100x100/A0A0A0/ffffff?text=Ali"
+    },
+    {
+      "memberId": 7,
+      "firstName": "Mohammed",
+      "lastName": "Ibrahim",
+      "imageUrl": "https://placehold.co/100x100/A0A0A0/ffffff?text=Mo"
+    },
+    {
+      "memberId": 8,
+      "firstName": "Mohammed",
+      "lastName": "Ibrahim",
+      "imageUrl": "https://placehold.co/100x100/A0A0A0/ffffff?text=Mo"
+    }
+  ]
+}
