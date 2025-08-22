@@ -1,4 +1,3 @@
-// src/components/MemberCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "../MembersPage.css";
@@ -15,9 +14,9 @@ const MemberCard = ({ member }) => {
 
   const fullImageUrl = getImageUrl(imageUrl);
   const fullName = `${firstName} ${lastName}`;
-
+  
   return (
-    <Link to={`/member/${memberId}`} className="member-card-link">
+    <Link to={`/profile/${memberId}`} className="member-card-link">
       <div className="member-card">
         <div className="member-image-container">
           <img

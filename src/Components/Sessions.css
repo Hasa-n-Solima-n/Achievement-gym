@@ -93,18 +93,26 @@ body {
     margin: 0;
 }
 
-.status-circle {
+/* .status-circle {
     width: 15px;
     height: 15px;
     border-radius: 50%;
     border: 2px solid var(--text-primary);
-}
+} */
 
-.status-circle.pending {
+.status-circle-Pending {
+    width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 2px solid var(--text-primary);
     background-color: var(--status-pending);
 }
 
-.status-circle.completed {
+.status-circle-Completed {
+    width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 2px solid var(--text-primary);
     background-color: var(--status-completed);
 }
 

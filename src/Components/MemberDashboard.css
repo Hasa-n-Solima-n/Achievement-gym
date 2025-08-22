@@ -1,0 +1,180 @@
+/* src/components/MemberDashboard.css */
+
+body {
+    background-color: #121212;
+    color: #f0f0f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    gap: 40px;
+}
+
+.left-panel,
+.right-panel {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.left-panel {
+    width: 300px;
+    height: auto;
+}
+
+.right-panel {
+    flex-grow: 1;
+    max-width: 800px;
+}
+
+.panel-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    color: #ffffff;
+    border-bottom: 2px solid #555;
+    padding-bottom: 10px;
+}
+
+.member-info-card {
+    text-align: center;
+}
+
+.member-image-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    border: 3px solid #666;
+}
+
+.member-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-name {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.member-bio {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin: 0 auto 20px;
+    max-width: 80%;
+}
+
+.contact-info {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.contact-info p {
+    margin: 8px 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.contact-info p i {
+    color: #888;
+    margin-right: 10px;
+    width: 20px;
+}
+
+.coach-info {
+    text-align: left;
+}
+
+.coach-name,
+.sport-type {
+    margin: 8px 0;
+    font-size: 1rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+}
+
+.coach-name i,
+.sport-type i {
+    color: #888;
+    margin-right: 10px;
+    width: 20px;
+}
+
+.add-session-btn-container {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.add-session-btn {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.add-session-btn:hover {
+    background-color: #777;
+}
+
+.select-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.exercise-select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background-color: #2a2a2a;
+    color: #f0f0f0;
+    font-size: 1rem;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.exercise-select:focus {
+    outline: none;
+    border-color: #888;
+}
+
+.chart-container {
+    background-color: #0d0d0d;
+    border-radius: 8px;
+    padding: 20px;
+    height: 400px;
+    width: 100%;
+}
+
+.loading-message,
+.error-message,
+.no-data-message {
+    text-align: center;
+    color: #f0f0f0;
+    font-size: 1.2rem;
+    padding: 50px;
+}
+
+.error-message {
+    color: #d9534f;
+}

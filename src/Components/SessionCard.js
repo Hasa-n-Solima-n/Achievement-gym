@@ -1,10 +1,11 @@
 // src/components/SessionCard.jsx
 import React from "react";
 import "./Sessions.css";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const SessionCard = ({ session }) => {
   const isCompleted = session.status === "Completed";
-  const statusClass = isCompleted ? "completed" : "pending";
+  const statusClass = isCompleted ? "Completed" : "Pending";
 
   const formatDuration = (minutes) => {
     const hours = Math.floor(minutes / 60);
@@ -24,29 +25,29 @@ const SessionCard = ({ session }) => {
   };
 
   return (
-    <div className="session-card">
-      <div className="card-header">
-        <div className="member-info">
-          <span className="member-name">{session.memberName || "N/A"}</span>
-          <p className="target-muscles">{session.targetMuscles.join(", ")}</p>
+    <Link to={`/SessionData/${session.sessionId}`}>
+      <div className="session-card">
+        <div className="card-header">
+          <div className="member-info">
+            <span className="member-name">{session.memberName || "N/A"}</span>
+            <p className="target-muscles">{session.targetMuscles.join(", ")}</p>
+          </div>
+          <div className={`status-circle-${statusClass}`}></div>
         </div>
-        <div className={`status-circle ${statusClass}`}>
-          
+        <div className="card-body">
+          <div className="detail-row">
+            <span className="detail-label">Duration</span>
+            <span className="detail-value">
+              {formatDuration(session.duration)}
+            </span>
+          </div>
+          <div className="detail-row">
+            <span className="detail-label">Date</span>
+            <span className="detail-value">{formatDate(session.date)}</span>
+          </div>
         </div>
       </div>
-      <div className="card-body">
-        <div className="detail-row">
-          <span className="detail-label">Duration</span>
-          <span className="detail-value">
-            {formatDuration(session.duration)}
-          </span>
-        </div>
-        <div className="detail-row">
-          <span className="detail-label">Date</span>
-          <span className="detail-value">{formatDate(session.date)}</span>
-        </div>
-      </div>
-    </div>
+    </Link>
   );
 };
 

@@ -9,14 +9,14 @@ const SessionData = ({ memberName }) => {
   useEffect(() => {
     const fetchSessionData = async () => {
       try {
-        const response = await fetch("https://your-api-url.com/session-data");
+        const response = await fetch("http://localhost:9700/session_info");
 
         if (!response.ok) {
           throw new Error("Failed to fetch session data.");
         }
 
         const result = await response.json();
-        setSessionData(result.data); 
+        setSessionData(result);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -24,7 +24,7 @@ const SessionData = ({ memberName }) => {
       }
     };
     fetchSessionData();
-  }, []); 
+  }, []);
 
   if (isLoading) {
     return <div className="loading-message">Loading session data...</div>;

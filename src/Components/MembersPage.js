@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import MemberCard from "./UI/MemberCard";
 import "./MembersPage.css";
+import "./HomePost.css";
+import NavBar from "./UI/NavBar";
+import Header from "./UI/Header";
 
 const MembersPage = () => {
   const [members, setMembers] = useState([]);
@@ -10,7 +13,6 @@ const MembersPage = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        // Replace with your actual API endpoint
         const response = await fetch("http://localhost:9700/gymMembers");
 
         if (!response.ok) {
@@ -18,8 +20,8 @@ const MembersPage = () => {
         }
 
         const result = await response.json();
-        // json-server returns the array directly for /gymMembers
-        setMembers(result);
+        const membersData = Array.isArray(result) ? result : (result.gymMembers || result.members || []);
+        setMembers(membersData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -39,16 +41,22 @@ const MembersPage = () => {
   }
 
   return (
-    <div className="members-page-container">
-      <h1 className="members-title">Members</h1>
-      <div className="members-list">
-        {members.length > 0 ? (
-          members.map((member) => (
-            <MemberCard key={member.memberId} member={member} />
-          ))
-        ) : (
-          <div className="no-members-message">No members found.</div>
-        )}
+    <div className="app-container">
+      <NavBar />
+      <div className="main-content">
+        <Header />
+        <main className="members-page-container">
+          <h1 className="members-title">Members</h1>
+          <div className="members-list">
+            {members.length > 0 ? (
+              members.map((member) => (
+                <MemberCard key={member.memberId} member={member} />
+              ))
+            ) : (
+              <div className="no-members-message">No members found.</div>
+            )}
+          </div>
+        </main>
       </div>
     </div>
   );

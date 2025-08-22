@@ -2,14 +2,14 @@
 /* Main page container */
 .members-page-container {
     padding: 20px;
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    font-family: 'Poppins', sans-serif;
     min-height: 100vh;
 }
 
 .members-title {
     text-align: center;
-    color: #333;
+    color: #f0f0f0;
     font-size: 2.5rem;
     margin-bottom: 30px;
 }
@@ -29,28 +29,29 @@
 }
 
 .member-card {
-    background-color: #fff;
+    background-color: #0d0d0d;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
-    padding: 15px;
-    width: 300px;
+    padding: 20px;
+    width: 350px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #333;
 }
 
 .member-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .member-image-container {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     overflow: hidden;
-    margin-right: 15px;
-    background-color: #e0e0e0;
+    margin-right: 20px;
+    background-color: #444;
     /* Placeholder background */
 }
 
@@ -67,7 +68,14 @@
 .member-name {
     margin: 0;
     font-size: 1.2rem;
-    color: #333;
+    color: #f0f0f0;
+}
+
+.member-description {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-top: 5px;
+    line-height: 1.4;
 }
 
 /* Messages for loading/error/no data */
@@ -76,7 +84,7 @@
 .no-members-message {
     text-align: center;
     font-size: 1.2rem;
-    color: #666;
+    color: #f0f0f0;
     margin-top: 50px;
 }
 

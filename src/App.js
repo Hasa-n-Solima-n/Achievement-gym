@@ -11,10 +11,11 @@ import HomePost from "./Components/HomePost";
 import AddSession from "./Components/AddSession";
 import Sessions from "./Components/Sessions";
 import MembersPage from "./Components/MembersPage";
+import MemberDashboard from "./Components/MemberDashboard";
+import SessionData from "./Components/SessionData";
 // import SessionData from "./Components/SessionData";
 
 const App = () => {
-
   return (
     <BrowserRouter>
       <Switch>
@@ -33,17 +34,20 @@ const App = () => {
         <Route exact path="/homePost">
           <HomePost />
         </Route>
-        <Route exact path="/addSession">
+        <Route exact path="/addSession/:memberId">
           <AddSession />
         </Route>
         <Route exact path="/Sessions">
           <Sessions />
         </Route>
-        <Route exact path="/SessionData">
-          <Sessions />
+        <Route exact path="/SessionData/:sessionId">
+          <SessionData/>
         </Route>
         <Route exact path="/members">
-          <MembersPage/>
+          <MembersPage />
+        </Route>
+        <Route exact path="/profile/:memberId">
+          <MemberDashboard />
         </Route>
       </Switch>
     </BrowserRouter>

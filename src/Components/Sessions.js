@@ -5,103 +5,61 @@ import "./Sessions.css";
 import Header from "./UI/Header";
 import NavBar from "./UI/NavBar";
 
-const dummyData = {
-  success: true,
-  message: "sessions retrieved successfully",
-  data: {
-    sessions: [
-      {
-        sessionId: 6,
-        duration: 100,
-        status: "Pending",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Triceps", "Core"],
-      },
-      {
-        sessionId: 6,
-        duration: 100,
-        status: "Pending",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Triceps", "Core"],
-      },
-      {
-        sessionId: 6,
-        duration: 100,
-        status: "Pending",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Triceps", "Core"],
-      },
-      {
-        sessionId: 6,
-        duration: 100,
-        status: "Pending",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Triceps", "Core"],
-      },
-      {
-        sessionId: 7,
-        duration: 100,
-        status: "Pending",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Shoulders", "Triceps", "Core", "Back"],
-      },
-      {
-        sessionId: 2,
-        duration: 100,
-        status: "Pending",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Triceps", "Core"],
-      },
-      {
-        sessionId: 4,
-        duration: 100,
-        status: "Completed",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Triceps", "Core"],
-      },
-      {
-        sessionId: 3,
-        duration: 100,
-        status: "Completed",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Core", "Triceps"],
-      },
-      {
-        sessionId: 5,
-        duration: 100,
-        status: "Pending",
-        date: "2025-05-04T21:00:00.000Z",
-        memberName: "Ali",
-        memberEmail: "ali@gmail.com",
-        targetMuscles: ["Triceps", "Core"],
-      },
-    ],
-  },
-};
-
 function Sessions() {
   const [sessions, setSessions] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    // In a real app, this would be a fetch call to your API
-    setSessions(dummyData.data.sessions);
+    const fetchSessions = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await fetch("http://localhost:9700/sessions");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch sessions data.");
+        }
+
+        const result = await response.json();
+        // Handle both array and object responses
+        const sessionsData = Array.isArray(result)
+          ? result
+          : result.sessions || result.data || [];
+        setSessions(sessionsData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSessions();
   }, []);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="app-container">
+        <NavBar />
+        <div className="main-content">
+          <Header />
+          <div className="loading-message">Loading sessions...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="app-container">
+        <NavBar />
+        <div className="main-content">
+          <Header />
+          <div className="error-message">Error: {error}</div>
+        </div>
+      </div>
+    );
+  }
 
   const column1 = sessions.filter((_, index) => index % 2 === 0);
   const column2 = sessions.filter((_, index) => index % 2 !== 0);
@@ -134,13 +92,13 @@ function Sessions() {
             <div className="footer-left">
               <div className="footer-logo">B</div>
               <div className="social-icons">
-                <a href="#">
+                <a href="/">
                   <span className="social-icon">X</span>
                 </a>
-                <a href="#">
+                <a href="/">
                   <span className="social-icon">O</span>
                 </a>
-                <a href="#">
+                <a href="/">
                   <span className="social-icon">in</span>
                 </a>
               </div>
