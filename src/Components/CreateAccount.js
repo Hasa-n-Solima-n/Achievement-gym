@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import "./CreateAccount.css"; 
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const COACHES_ENDPOINT = "https://your-api-url.com/coaches";
+const COACHES_ENDPOINT = `localhost:7900/api/profiles/getAllCoaches/`;
 
 const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
   <div className="form-content">
@@ -122,7 +122,7 @@ const ProfileInfoStep = ({
   const [coaches, setCoaches] = useState([]);
   const [loadingCoaches, setLoadingCoaches] = useState(false);
   const [coachesError, setCoachesError] = useState("");
-
+  
   useEffect(() => {
     let isCancelled = false;
     const fetchCoaches = async () => {
@@ -130,7 +130,7 @@ const ProfileInfoStep = ({
       setLoadingCoaches(true);
       setCoachesError("");
       try {
-        const response = await fetch(COACHES_ENDPOINT);
+        const response = await fetch(`${COACHES_ENDPOINT}`);
         if (!response.ok) throw new Error("Failed to load coaches");
         const data = await response.json();
         const list =

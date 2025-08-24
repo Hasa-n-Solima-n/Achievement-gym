@@ -13,7 +13,16 @@ function Sessions() {
     const fetchSessions = async () => {
       try {
         // Replace with your actual API endpoint
-        const response = await fetch("http://localhost:9700/sessions");
+        const response = await fetch(
+          "http://localhost:7900/api/sessions/getAllSessions",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6MSwiZW1haWwiOiJoYXNhbkBnbWFpbC5jb20iLCJjb2FjaElkIjoxLCJhY2NvdW50VHlwZSI6Ikd5bU1lbWJlciIsImlhdCI6MTc1NjA0MDA5Nn0.p0OzR_1nDUBUIfdYumV4ysamdwYl1D6T6WngJGbllLc`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch sessions data.");
@@ -21,9 +30,8 @@ function Sessions() {
 
         const result = await response.json();
         // Handle both array and object responses
-        const sessionsData = Array.isArray(result)
-          ? result
-          : result.sessions || result.data || [];
+        const sessionsData = result.data.sessions || [];
+        console.log(sessionsData);
         setSessions(sessionsData);
       } catch (err) {
         setError(err.message);

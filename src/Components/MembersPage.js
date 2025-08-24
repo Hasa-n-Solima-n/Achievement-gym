@@ -13,14 +13,23 @@ const MembersPage = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await fetch("http://localhost:9700/gymMembers");
+        const response = await fetch(
+          "http://localhost:7900/api/profiles/getMyMembers",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2FjaElkIjoxLCJlbWFpbCI6Im1vaGFtbWVkbW8xaGFtbTJlZDQ5MzE4ODVAZ21haWwuY29tIiwic3BvcnRUeXBlIjoiQ2FsaXN0aGVuaWNzIiwiYWNjb3VudFR5cGUiOiJDb2FjaCIsImlhdCI6MTc1NjA0MTA0MX0.5r6JLdvVuzGF5FoRfYDiEBmNqNFiGdJsAZS8U2WjuLE`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch members data.");
         }
 
         const result = await response.json();
-        const membersData = Array.isArray(result) ? result : (result.gymMembers || result.members || []);
+        const membersData = result.data.gymMembers || [];
         setMembers(membersData);
       } catch (err) {
         setError(err.message);
