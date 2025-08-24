@@ -5,6 +5,9 @@ import "./ResetPassword.css";
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [reEnterPassword, setReEnterPassword] = useState("");
+  const [token, setToken] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const history = useHistory();
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
@@ -14,14 +17,51 @@ const ResetPassword = () => {
     setReEnterPassword(e.target.value);
   };
 
-  const handleSaveClick = (e) => {
+  const handleSaveClick = async (e) => {
     e.preventDefault();
+    
+    // التحقق من تطابق كلمات المرور
     if (newPassword !== reEnterPassword) {
-      alert("The Passwords you entered doesn't match");
+      setError("The Passwords you entered doesn't match");
       return;
     }
-    console.log(newPassword);
-    alert("Your new password is saved");
+
+    // التحقق من وجود التوكن
+    if (!token.trim()) {
+      setError("Please enter the token from your email");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:7900/api/users/resetpassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          password: newPassword,
+          token: token
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Password reset successful:", data);
+        alert("Your new password is saved successfully!");
+        history.push("/login");
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to reset password");
+      }
+    } catch (err) {
+      console.error("Reset password failed:", err.message);
+      setError(err.message || "Failed to reset password. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -51,6 +91,21 @@ const ResetPassword = () => {
 
           <form onSubmit={handleSaveClick}>
             <div className="input-group">
+              <label htmlFor="token" className="input-label">
+                Token
+              </label>
+              <input
+                type="text"
+                id="token"
+                className="form-input"
+                placeholder="Enter the token from your email"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="input-group">
               <label htmlFor="new-password" className="input-label">
                 New Password
               </label>
@@ -79,8 +134,15 @@ const ResetPassword = () => {
                 required
               />
             </div>
-            <button type="submit" className="save-button">
-              Save
+
+            {error && <div className="error-message">{error}</div>}
+
+            <button 
+              type="submit" 
+              className="save-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Saving..." : "Save"}
             </button>
           </form>
         </div>

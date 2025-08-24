@@ -6,15 +6,31 @@ import "./Forgot.css";
 
 const Forgot = () => {
   const [email, setEmail] = useState("");
+  const [accountType, setAccountType] = useState("");
   const history = useHistory();
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const handleNextClick = (e) => {
+  const handleNextClick = async(e) => {
     e.preventDefault();
-    console.log(email);
-    setEmail("");
+    console.log("Email:", email);
+    console.log("Account Type:", accountType);
+    
+    const response = await fetch("http://localhost:7900/api/users/forgetpassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, accountType }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Response:", data.success);
+      history.push("/Reset");
+    } else {
+      console.error("Error:", response.statusText);
+    }
   };
 
   return (
@@ -61,6 +77,24 @@ const Forgot = () => {
                 required
               />
             </div>
+
+            <div className="input-group">
+              <label htmlFor="accountType" className="input-label">
+                Account Type
+              </label>
+              <select
+                id="accountType"
+                className="form-input"
+                value={accountType}
+                onChange={(e) => setAccountType(e.target.value)}
+                required
+              >
+                <option value="">account type</option>
+                <option value="GymMember">Gym Member</option>
+                <option value="Coach">Coach</option>
+              </select>
+            </div>
+
             <button type="submit" className="next-button">
               Next
             </button>

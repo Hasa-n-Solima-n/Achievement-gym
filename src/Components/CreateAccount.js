@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import "./CreateAccount.css"; 
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const COACHES_ENDPOINT = `localhost:7900/api/profiles/getAllCoaches/`;
+
 
 const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
   <div className="form-content">
@@ -113,7 +113,7 @@ const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
   </div>
 );
 
-const ProfileInfoStep = ({
+const ProfileInfoStep2 = ({
   prevStep,
   handleSubmit,
   formData,
@@ -124,44 +124,9 @@ const ProfileInfoStep = ({
   const [coachesError, setCoachesError] = useState("");
   
   useEffect(() => {
-    let isCancelled = false;
-    const fetchCoaches = async () => {
-      if (formData.userType !== "gymMember") return;
-      setLoadingCoaches(true);
-      setCoachesError("");
-      try {
-        const response = await fetch(`${COACHES_ENDPOINT}`);
-        if (!response.ok) throw new Error("Failed to load coaches");
-        const data = await response.json();
-        const list =
-          (data && data.data && (data.data.coaches || data.data)) ||
-          data.coaches ||
-          data ||
-          [];
-        const normalized = Array.isArray(list)
-          ? list.map((c, idx) => {
-              if (typeof c === "string") return { id: c, name: c };
-              const id = c.id || c._id || c.userId || idx;
-              const name =
-                c.name ||
-                [c.firstName, c.lastName].filter(Boolean).join(" ") ||
-                c.email ||
-                String(id);
-              return { id, name };
-            })
-          : [];
-        if (!isCancelled) setCoaches(normalized);
-      } catch (err) {
-        if (!isCancelled) setCoachesError("Could not load coaches");
-      } finally {
-        if (!isCancelled) setLoadingCoaches(false);
-      }
-    };
-    fetchCoaches();
-    return () => {
-      isCancelled = true;
-    };
-  }, [formData.userType]);
+   
+    
+  }, [formData.accountType]);
 
   return (
     <div className="form-content">
@@ -183,13 +148,59 @@ const ProfileInfoStep = ({
             name="sportType"
             className="form-input"
             value={formData.sportType}
-            onChange={handleChange}
+            // onChange={}
+                         onChange={(e)=>{
+               handleChange(e);
+                let isCancelled = false;
+                const fetchCoaches = async () => {
+      if (formData.accountType !== "gymMember") return;
+      setLoadingCoaches(true);
+      setCoachesError("");
+      try {
+        const response = await fetch(`http://localhost:7900/api/profiles/getAllCoaches/${encodeURIComponent(e.target.value)}`,{
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "GET",
+        });
+       
+        if (!response.ok) throw new Error("Failed to load coaches");
+        const data = await response.json();
+         console.log(data.success);
+        const list =
+           data.data ||
+          [];
+        const normalized = Array.isArray(list)
+          ? list.map((c, idx) => {
+              if (typeof c === "string") return { id: c, name: c };
+              const id = c.id || c._id || c.userId || idx;
+              const name =
+                c.name ||
+                [c.firstName, c.lastName].filter(Boolean).join(" ") ||
+                c.email ||
+                String(id);
+              return { id, name };
+            })
+          : [];
+        if (!isCancelled) setCoaches(normalized);
+      } catch (err) {
+        if (!isCancelled) setCoachesError("Could not load coaches");
+      } finally {
+        if (!isCancelled) setLoadingCoaches(false);
+      }
+    };
+    // handleChange();
+    fetchCoaches();
+    return () => {
+      isCancelled = true;
+    };
+             }}
             required
           >
-            <option value="">Select a sport</option>
-            <option value="fitness">Fitness</option>
-            <option value="running">Running</option>
-            <option value="swimming">Swimming</option>
+            {/* <option value="">Select a sport</option> */}
+            <option value="Powerlifting">Power Lifting</option>
+            <option value="Body building">Body building</option>
+            <option value="Calisthenics">Calisthenics</option>
           </select>
         </div>
         <div className="input-group">
@@ -229,9 +240,9 @@ const ProfileInfoStep = ({
           <label className="radio-label">
             <input
               type="radio"
-              name="userType"
+              name="accountType"
               value="coach"
-              checked={formData.userType === "coach"}
+              checked={formData.accountType === "coach"}
               onChange={handleChange}
             />
             <span className="radio-text">Coach</span>
@@ -239,15 +250,15 @@ const ProfileInfoStep = ({
           <label className="radio-label">
             <input
               type="radio"
-              name="userType"
+              name="accountType"
               value="gymMember"
-              checked={formData.userType === "gymMember"}
+              checked={formData.accountType === "gymMember"}
               onChange={handleChange}
             />
             <span className="radio-text">Gym Member</span>
           </label>
         </div>
-        {formData.userType === "gymMember" && (
+        {formData.accountType === "gymMember" && (
           <div className="input-group">
             <label htmlFor="coachId" className="input-label">
               Coach
@@ -299,7 +310,7 @@ function CreateAccount() {
     sportType: "",
     bio: "",
     image: null,
-    userType: "gymMember",
+    accountType: "coach",
     coachId: "",
   });
 
@@ -352,7 +363,7 @@ function CreateAccount() {
             handleChange={handleChange}
           />
         ) : (
-          <ProfileInfoStep
+          <ProfileInfoStep2
             prevStep={prevStep}
             handleSubmit={handleSubmit}
             formData={formData}

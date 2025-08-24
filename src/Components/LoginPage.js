@@ -7,6 +7,7 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accountType, setAccountType] = useState("gymMember");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -39,12 +40,12 @@ const LoginPage = () => {
 
     try {
       // ** Code for real API integration **
-      const response = await fetch("https://your-api-url.com/login", {
+      const response = await fetch("http://localhost:7900/api/users/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, accountType }),
       });
 
       if (!response.ok) {
@@ -58,9 +59,14 @@ const LoginPage = () => {
       const data = await response.json();
 
       // Store the token in the browser's local storage
-      localStorage.setItem("authToken", data.token);
+      localStorage.setItem("authToken", data.data.token);
+      localStorage.setItem("accountType", data.data.accountType);
+      localStorage.setItem("memberId", data.data.tokenInfo.memberId);
+      localStorage.setItem("coachId", data.data.tokenInfo.coachId);
+      localStorage.setItem("email", data.data.tokenInfo.email);
 
       console.log("Login Successful! Token stored:", data.token);
+      console.log("Account Type:", accountType);
       // Redirect to the home page or sessions page
       navigate.push("/sessions");
     } catch (err) {
@@ -121,6 +127,23 @@ const LoginPage = () => {
             autoComplete="current-password"
             required
           />
+
+          <label htmlFor="accountType-input" className="input-label">
+            Account Type
+          </label>
+          <select
+            id="accountType-input"
+            className="login-input"
+            defaultValue="GymMember"
+            onChange={(e) => setAccountType(e.target.value)}
+            value={accountType}
+            required
+          >
+            <option value="">account type</option>
+            <option value="GymMember">Gym Member</option>
+            <option value="Coach">Coach</option>
+          </select>
+
           {error && <div className="error-message">{`${error}...!`}</div>}
 
           <Link to="/Forgot" className="forgot-password">
