@@ -1,6 +1,7 @@
 // src/components/AddSession.jsx
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import "./AddSession.css";
 import NavBar from "./UI/NavBar";
 import Header from "./UI/Header";
@@ -9,18 +10,17 @@ const DynamicInputGroup = ({
   exercise,
   handleInputChange,
   index,
-  muscleGroups,
   exercisesList,
 }) => {
   return (
     <div className="dynamic-input-group">
       <select
         className="dynamic-select"
-        name="muscleGroup"
-        value={exercise.muscleGroup}
+        name="targetMuscle"
+        value={exercise.targetMuscle}
         onChange={(e) => handleInputChange(index, e)}
       >
-        <option value="">Select Muscle Group</option>
+        <option value="">Select Target Muscle</option>
         <option value="Core">Core</option>
         <option value="Back">Back</option>
         <option value="Legs">Legs</option>
@@ -35,17 +35,20 @@ const DynamicInputGroup = ({
       </select>
       <select
         className="dynamic-select"
-        name="exerciseName"
-        value={exercise.exerciseName}
+        name="exerciseId"
+        value={exercise.exerciseId}
         onChange={(e) => handleInputChange(index, e)}
       >
         <option value="">Select Exercise</option>
-        {/* في مشروع حقيقي، سيتم عرض الخيارات بناءً على exerciseList */}
-        {exercisesList.map((ex, i) => (
-          <option key={i} value={ex}>
-            {ex}
-          </option>
-        ))}
+        {exercisesList && exercisesList.length > 0 ? (
+          exercisesList.map((ex) => (
+            <option key={ex.exerciseId} value={ex.exerciseId}>
+              {ex.exerciseName}
+            </option>
+          ))
+        ) : (
+          <option value="" disabled>No exercises available</option>
+        )}
       </select>
       <input
         type="number"
@@ -61,24 +64,62 @@ const DynamicInputGroup = ({
 
 function AddSession() {
   const [sessionData, setSessionData] = useState({
-    // memberName: "",
     duration: "",
     date: "",
-    exercises: [{ muscleGroup: "", exerciseName: "", weight: "" }],
+    exercises: [{ targetMuscle: "", exerciseId: "", weight: "" }],
   });
+  const [exercisesList, setExercisesList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { memberId } = useParams();
+  const token = localStorage.getItem("authToken");
 
-  const getExercisesByMuscleGroup = (muscleGroup) => {
-    switch (muscleGroup) {
-      case "Core":
-        return ["Plank", "Crunches", "Leg Raises"];
-      case "Back":
-        return ["Deadlift", "Pull-ups", "Rows"];
-      case "Legs":
-        return ["Squats", "Lunges", "Leg Press"];
-      default:
-        return [];
+  // Fetch exercises when targetMuscle changes
+  const getExercisesByMuscleGroup = async (muscleGroup) => {
+    if (!muscleGroup) return [];
+    
+    try {
+      const response = await fetch(`http://localhost:7900/api/exercises/getExrecises/${muscleGroup}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch exercises.");
+      }
+
+      const result = await response.json();
+      console.log(result.data.exercises)
+      return result.data.exercises || [];
+    } catch (err) {
+      console.error("Error fetching exercises:", err);
+      return [];
     }
   };
+
+  // Handle muscle group change and fetch exercises
+  const handleMuscleGroupChange = async (index, e) => {
+    const { value } = e.target;
+    const newExercises = [...sessionData.exercises];
+    newExercises[index].targetMuscle = value;
+    newExercises[index].exerciseId = ""; // Reset exercise selection
+    
+    setSessionData((prevData) => ({
+      ...prevData,
+      exercises: newExercises,
+    }));
+
+    // Fetch exercises for the selected muscle group
+    if (value) {
+      const exercises = await getExercisesByMuscleGroup(value);
+      setExercisesList(exercises);
+    } else {
+      setExercisesList([]);
+    }
+  };
+
 
   const handleSessionDataChange = (e) => {
     const { name, value } = e.target;
@@ -93,13 +134,20 @@ function AddSession() {
       ...prevData,
       exercises: [
         ...prevData.exercises,
-        { muscleGroup: "", exerciseName: "", weight: "" },
+        { targetMuscle: "", exerciseId: "", weight: "" },
       ],
     }));
   };
 
   const handleDynamicInputChange = (index, e) => {
     const { name, value } = e.target;
+    
+    // Special handling for targetMuscle changes
+    if (name === "targetMuscle") {
+      handleMuscleGroupChange(index, e);
+      return;
+    }
+    
     const newExercises = [...sessionData.exercises];
     newExercises[index][name] = value;
     setSessionData((prevData) => ({
@@ -108,11 +156,61 @@ function AddSession() {
     }));
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    console.log("Session data:", sessionData);
-    alert("Session saved successfully");
+    
+    // Format data according to API requirements
+    const apiData = {
+      memberId: parseInt(memberId),
+      duration: parseInt(sessionData.duration),
+      date: sessionData.date,
+      exercises: sessionData.exercises.map(exercise => ({
+        exerciseId: exercise.exerciseId,
+        weight: parseInt(exercise.weight)
+      }))
+    };
+    
+    try {
+      const response = await fetch("http://localhost:7900/api/sessions/addSession", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(apiData),
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to save session");
+      }
+      
+      const result = await response.json();
+      console.log("Session saved successfully:", result);
+      alert("Session saved successfully");
+      
+      // Reset form
+      setSessionData({
+        duration: "",
+        date: "",
+        exercises: [{ targetMuscle: "", exerciseId: "", weight: "" }],
+      });
+    } catch (err) {
+      console.error("Error saving session:", err);
+      alert("Failed to save session: " + err.message);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="add-session-app-container">
+        <NavBar />
+        <div className="main-content">
+          <Header />
+          <div className="loading-message">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="add-session-app-container">
@@ -170,9 +268,7 @@ function AddSession() {
                   exercise={exercise}
                   handleInputChange={handleDynamicInputChange}
                   index={index}
-                  exercisesList={getExercisesByMuscleGroup(
-                    exercise.muscleGroup
-                  )}
+                  exercisesList={exercisesList}
                 />
               ))}
               <button
@@ -243,6 +339,6 @@ function AddSession() {
       </div>
     </div>
   );
-}
+};
 
 export default AddSession;

@@ -14,7 +14,7 @@ import "./MemberDashboard.css";
 import "./HomePost.css";
 import NavBar from "./UI/NavBar";
 import Header from "./UI/Header";
-
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 const MemberDashboard = () => {
   const [memberInfo, setMemberInfo] = useState(null);
   const [coachInfo, setCoachInfo] = useState(null);
@@ -23,12 +23,27 @@ const MemberDashboard = () => {
   const [progressData, setProgressData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const token=localStorage.getItem("authToken");
+      const {memberId}=useParams();
 
   // Function to fetch member data and exercises from the API
   const fetchMemberData = async () => {
+
     try {
-      const memberResponse = await fetch("http://localhost:9700/memberInfo");
-      const exercisesResponse = await fetch("http://localhost:9700/exercises");
+      const memberResponse = await fetch(`http://localhost:7900/api/profiles/getMemberInfo/${memberId}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const exercisesResponse = await fetch(`http://localhost:7900/api/exercises/getProgressExercises/${memberId}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!memberResponse.ok || !exercisesResponse.ok) {
         throw new Error("Failed to fetch data");
@@ -37,9 +52,10 @@ const MemberDashboard = () => {
       const memberResult = await memberResponse.json();
       const exercisesResult = await exercisesResponse.json();
 
-      setMemberInfo(memberResult.memberInfo || memberResult);
-      setCoachInfo(memberResult.coachInfo);
-      setExercises(exercisesResult);
+      setMemberInfo(memberResult.data.memberInfo);
+      setCoachInfo(memberResult.data.coachInfo);
+      console.log(memberResult.data.memberInfo.coachInfo);
+      setExercises(exercisesResult.data.exercises || []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -50,13 +66,21 @@ const MemberDashboard = () => {
   const fetchProgressData = async (exerciseId) => {
     setIsLoading(true);
     try {
+      console.log(memberId,exerciseId);
       // Fetch progress data from the API based on the selected exerciseId
-      const progressResponse = await fetch(`http://localhost:9700/progress`);
+      const progressResponse = await fetch(`http://localhost:7900/api/profiles/getProgressData/${memberId}/${exerciseId}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!progressResponse.ok) {
         throw new Error("Failed to fetch progress data.");
       }
       const progressResult = await progressResponse.json();
-      setProgressData(progressResult);
+      console.log(progressResult.data.progress);
+      setProgressData(progressResult.data.progress);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -117,7 +141,7 @@ const MemberDashboard = () => {
                 {memberInfo?.firstName} {memberInfo?.lastName}
               </h3>
               <p className="member-bio">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                {memberInfo?.bio}
               </p>
               <div className="contact-info">
                 <p>
@@ -136,14 +160,16 @@ const MemberDashboard = () => {
                   <i className="fas fa-dumbbell"></i> {memberInfo?.sportType}
                 </p>
               </div>
-              <div className="add-session-btn-container">
-                <Link
-                  to={`/addSession/${memberInfo?.memberId}`}
-                  className="add-session-btn"
-                >
-                  Add Session
-                </Link>
-              </div>
+              {localStorage.getItem("accountType") === "Coach" && (
+                <div className="add-session-btn-container">
+                  <Link
+                    to={`/addSession/${memberInfo?.memberId}`}
+                    className="add-session-btn"
+                  >
+                    Add Session
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
           <div className="right-panel">

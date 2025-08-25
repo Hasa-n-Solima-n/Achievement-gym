@@ -10,6 +10,7 @@ function Sessions() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
+    const token=localStorage.getItem("authToken");
     const fetchSessions = async () => {
       try {
         // Replace with your actual API endpoint
@@ -19,7 +20,7 @@ function Sessions() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6MSwiZW1haWwiOiJoYXNhbkBnbWFpbC5jb20iLCJjb2FjaElkIjoxLCJhY2NvdW50VHlwZSI6Ikd5bU1lbWJlciIsImlhdCI6MTc1NjA0MDA5Nn0.p0OzR_1nDUBUIfdYumV4ysamdwYl1D6T6WngJGbllLc`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );

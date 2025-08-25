@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const NavBar = () => {
+  const accountType = localStorage.getItem("accountType");
+  const memberId = localStorage.getItem("memberId");
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -14,11 +16,19 @@ const NavBar = () => {
               <span className="nav-icon"></span>Home
             </Link>
           </li>
-          <li>
-            <Link to="/members" className="nav-item">
-              <span className="nav-icon"></span>Members
-            </Link>
-          </li>
+          {accountType === "Coach" ? (
+            <li>
+              <Link to="/members" className="nav-item">
+                <span className="nav-icon"></span>Members
+              </Link>
+            </li>
+          ) : accountType === "GymMember" && memberId ? (
+            <li>
+              <Link to={`/profile/${memberId}`} className="nav-item">
+                <span className="nav-icon"></span>Profile
+              </Link>
+            </li>
+          ) : null}
           {/* <li>
             <Link to="/addSession" className="nav-item">
               <span className="nav-icon"></span>Add Session

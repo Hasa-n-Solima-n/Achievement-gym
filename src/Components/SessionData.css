@@ -6,11 +6,16 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 24px;
     width: 100%;
-    max-width: 500px;
-    margin: 20px auto;
+    max-width: 900px;
+    margin: 24px auto;
     font-family: Arial, sans-serif;
     position: relative;
     overflow: hidden;
+}
+
+/* align with sessions page spacing */
+.sessions-main-content {
+    padding: 24px;
 }
 
 .loading-message,
