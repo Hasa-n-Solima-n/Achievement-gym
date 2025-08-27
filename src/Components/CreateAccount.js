@@ -118,15 +118,54 @@ const ProfileInfoStep2 = ({
   handleSubmit,
   formData,
   handleChange,
+  submitting,
+  submitError,
 }) => {
   const [coaches, setCoaches] = useState([]);
   const [loadingCoaches, setLoadingCoaches] = useState(false);
   const [coachesError, setCoachesError] = useState("");
   
   useEffect(() => {
-   
-    
-  }, [formData.accountType]);
+    let isCancelled = false;
+    const fetchCoaches = async () => {
+      if (formData.accountType !== "GymMember") return;
+      if (!formData.sportType) return;
+      setLoadingCoaches(true);
+      setCoachesError("");
+      try {
+        const response = await fetch(`http://localhost:7900/api/profiles/getAllCoaches/${encodeURIComponent(formData.sportType)}`,{
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "GET",
+        });
+        if (!response.ok) throw new Error("Failed to load coaches");
+        const data = await response.json();
+        const list = data && data.data;
+        const normalized = Array.isArray(list)
+          ? list.map((c, idx) => {
+              // if (typeof c === "string") return { id: c, name: c };
+              const id = c.coachId;
+              const name =
+                c.name ||
+                [c.firstName, c.lastName].filter(Boolean).join(" ") ||
+                c.email ||
+                String(id);
+              return { id, name };
+            })
+          : [];
+        if (!isCancelled) setCoaches(normalized);
+      } catch (err) {
+        if (!isCancelled) setCoachesError("Could not load coaches");
+      } finally {
+        if (!isCancelled) setLoadingCoaches(false);
+      }
+    };
+    fetchCoaches();
+    return () => {
+      isCancelled = true;
+    };
+  }, [formData.accountType, formData.sportType]);
 
   return (
     <div className="form-content">
@@ -148,53 +187,7 @@ const ProfileInfoStep2 = ({
             name="sportType"
             className="form-input"
             value={formData.sportType}
-            // onChange={}
-                         onChange={(e)=>{
-               handleChange(e);
-                let isCancelled = false;
-                const fetchCoaches = async () => {
-      if (formData.accountType !== "gymMember") return;
-      setLoadingCoaches(true);
-      setCoachesError("");
-      try {
-        const response = await fetch(`http://localhost:7900/api/profiles/getAllCoaches/${encodeURIComponent(e.target.value)}`,{
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        });
-       
-        if (!response.ok) throw new Error("Failed to load coaches");
-        const data = await response.json();
-         console.log(data.success);
-        const list =
-           data.data ||
-          [];
-        const normalized = Array.isArray(list)
-          ? list.map((c, idx) => {
-              if (typeof c === "string") return { id: c, name: c };
-              const id = c.id || c._id || c.userId || idx;
-              const name =
-                c.name ||
-                [c.firstName, c.lastName].filter(Boolean).join(" ") ||
-                c.email ||
-                String(id);
-              return { id, name };
-            })
-          : [];
-        if (!isCancelled) setCoaches(normalized);
-      } catch (err) {
-        if (!isCancelled) setCoachesError("Could not load coaches");
-      } finally {
-        if (!isCancelled) setLoadingCoaches(false);
-      }
-    };
-    // handleChange();
-    fetchCoaches();
-    return () => {
-      isCancelled = true;
-    };
-             }}
+            onChange={handleChange}
             required
           >
             {/* <option value="">Select a sport</option> */}
@@ -241,8 +234,8 @@ const ProfileInfoStep2 = ({
             <input
               type="radio"
               name="accountType"
-              value="coach"
-              checked={formData.accountType === "coach"}
+              value="Coach"
+              checked={formData.accountType === "Coach"}
               onChange={handleChange}
             />
             <span className="radio-text">Coach</span>
@@ -251,14 +244,14 @@ const ProfileInfoStep2 = ({
             <input
               type="radio"
               name="accountType"
-              value="gymMember"
-              checked={formData.accountType === "gymMember"}
+              value="GymMember"
+              checked={formData.accountType === "GymMember"}
               onChange={handleChange}
             />
             <span className="radio-text">Gym Member</span>
           </label>
         </div>
-        {formData.accountType === "gymMember" && (
+        {formData.accountType === "GymMember" && (
           <div className="input-group">
             <label htmlFor="coachId" className="input-label">
               Coach
@@ -283,15 +276,22 @@ const ProfileInfoStep2 = ({
                 ))}
             </select>
             {coachesError && (
-              <span className="char-count" style={{ color: "#e74c3c" }}>
+              <span style={{ color: "#e74c3c", display: "block", marginTop: 6 }}>
                 {coachesError}
               </span>
             )}
           </div>
         )}
 
-        <button type="submit" className="start-button">
-          Start
+        {submitError && (
+          <div className="input-group" role="alert" aria-live="polite">
+            <span style={{ color: "#e74c3c", display: "block" }}>
+              {submitError}
+            </span>
+          </div>
+        )}
+        <button type="submit" className="start-button" disabled={submitting}>
+          {submitting ? "Creating..." : "Start"}
         </button>
       </form>
     </div>
@@ -310,9 +310,11 @@ function CreateAccount() {
     sportType: "",
     bio: "",
     image: null,
-    accountType: "coach",
+    accountType: "Coach",
     coachId: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -333,11 +335,69 @@ function CreateAccount() {
 
   const prevStep = () => setStep(1);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    //to bu hammodi backend legend
-    console.log("All form data", formData);
-    alert("Account created successfully");
+    setSubmitError("");
+    if (!formData.sportType) {
+      setSubmitError("Please select a sport type");
+      return;
+    }
+    if (formData.accountType === "GymMember" && !formData.coachId) {
+      setSubmitError("Please select a coach");
+      return;
+    }
+
+    const payload = {
+      accountType: formData.accountType,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      bio: formData.bio,
+      phoneNumber: formData.phone,
+      email: formData.email,
+      password: formData.password,
+      sportType: formData.sportType,
+      // imageUrl: "",
+      ...(formData.accountType === "GymMember" ? { coachId: formData.coachId } : {}),
+    };
+
+    try {
+      setSubmitting(true);
+      const response = await fetch("http://localhost:7900/api/users/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const contentType = response.headers.get("content-type") || "";
+      const isJson = contentType.includes("application/json");
+      const data = isJson ? await response.json() : null;
+
+      if (!response.ok) {
+        const apiMessage = data && (data.message || data.error || data.errors?.[0]?.msg);
+        throw new Error(apiMessage || `Signup failed (${response.status})`);
+      }
+
+      alert("Account created successfully");
+      setStep(1);
+      setFormData((prev) => ({
+        ...prev,
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        sportType: "",
+        bio: "",
+        image: null,
+        accountType: "Coach",
+        coachId: 0,
+      }));
+    } catch (err) {
+      setSubmitError(err.message || "Something went wrong");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const navigate = useHistory();
@@ -368,6 +428,8 @@ function CreateAccount() {
             handleSubmit={handleSubmit}
             formData={formData}
             handleChange={handleChange}
+            submitting={submitting}
+            submitError={submitError}
           />
         )}
 

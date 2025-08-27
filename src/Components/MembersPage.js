@@ -13,13 +13,14 @@ const MembersPage = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
+        const token=localStorage.getItem("authToken")
         const response = await fetch(
           "http://localhost:7900/api/profiles/getMyMembers",
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2FjaElkIjoxLCJlbWFpbCI6Im1vaGFtbWVkbW8xaGFtbTJlZDQ5MzE4ODVAZ21haWwuY29tIiwic3BvcnRUeXBlIjoiQ2FsaXN0aGVuaWNzIiwiYWNjb3VudFR5cGUiOiJDb2FjaCIsImlhdCI6MTc1NjA0MTA0MX0.5r6JLdvVuzGF5FoRfYDiEBmNqNFiGdJsAZS8U2WjuLE`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );

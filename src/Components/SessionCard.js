@@ -29,7 +29,7 @@ const SessionCard = ({ session }) => {
       <div className="session-card">
         <div className="card-header">
           <div className="member-info">
-            <span className="member-name">{session.memberName || "N/A"}</span>
+            <span className="member-name">{session.memberName || "Hasan Soliman"}</span>
             <p className="target-muscles">{session.targetMuscles.join(", ")}</p>
           </div>
           <div className={`status-circle-${statusClass}`}></div>

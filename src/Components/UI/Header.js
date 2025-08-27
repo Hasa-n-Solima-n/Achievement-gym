@@ -8,7 +8,8 @@ const Header = () => {
               &#9998;
             </span>
           </button>
-          <div className="header-avatar"></div>
+          {/* <div className="header-avatar"></div> */}
+          <img className="header-avatar" src="logo.jpg"/>
         </div>
       </header>
     );

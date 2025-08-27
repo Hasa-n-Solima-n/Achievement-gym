@@ -112,8 +112,8 @@ const MemberDashboard = () => {
 
   const getImageUrl = (path) => {
     // This function can be used to construct the full image URL.
-    const baseApiUrl = "http://your-api-url.com/"; // Replace with your base API URL
-    if (!path) return "https://placehold.co/100x100/A0A0A0/ffffff?text=User";
+    const baseApiUrl = "http://localhost:7900/"; // Replace with your base API URL
+    if (!path) return "http://localhost:7900/uploads/avatar.jpg";
     return `${baseApiUrl}${path.replace(/\\/g, "/")}`;
   };
 

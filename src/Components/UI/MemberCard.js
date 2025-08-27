@@ -6,9 +6,9 @@ const MemberCard = ({ member }) => {
   const { memberId, firstName, lastName, imageUrl } = member;
 
   const getImageUrl = (path) => {
-    if (!path) return "https://placehold.co/100x100/A0A0A0/ffffff?text=User";
-    if (/^https?:\/\//i.test(path)) return path;
-    const baseStaticUrl = "http://localhost:9700"; // adjust if your static base differs
+    if (!path) return "uploads/avatar.jpg";
+    // if (/^https?:\/\//i.test(path)) return path;
+    const baseStaticUrl = "http://localhost:7900/"; // adjust if your static base differs
     return `${baseStaticUrl}${path.replace(/\\/g, "/")}`;
   };
 
@@ -27,7 +27,7 @@ const MemberCard = ({ member }) => {
               // Fallback to a placeholder image on error
               e.target.onerror = null; // prevents infinite loop
               e.target.src =
-                "https://placehold.co/100x100/A0A0A0/ffffff?text=User";
+                "http://localhost:7900/uploads/avatar.jpg";
             }}
           />
         </div>
