@@ -13,7 +13,7 @@ const MembersPage = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const token=localStorage.getItem("authToken")
+        const token = localStorage.getItem("authToken");
         const response = await fetch(
           "http://localhost:7900/api/profiles/getMyMembers",
           {

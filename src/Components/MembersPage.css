@@ -52,6 +52,7 @@
     overflow: hidden;
     margin-right: 20px;
     background-color: #444;
+    margin: 0pz;
     /* Placeholder background */
 }
 
@@ -63,6 +64,8 @@
 
 .member-info {
     flex-grow: 1;
+    margin-left: 20px;
+    margin-bottom: 10px;
 }
 
 .member-name {

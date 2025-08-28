@@ -1,4 +1,4 @@
-// src/components/Sessions.jsx
+
 import React, { useState, useEffect } from "react";
 import SessionCard from "./SessionCard";
 import "./Sessions.css";
@@ -13,7 +13,7 @@ function Sessions() {
     const token=localStorage.getItem("authToken");
     const fetchSessions = async () => {
       try {
-        // Replace with your actual API endpoint
+       
         const response = await fetch(
           "http://localhost:7900/api/sessions/getAllSessions",
           {
@@ -30,7 +30,6 @@ function Sessions() {
         }
 
         const result = await response.json();
-        // Handle both array and object responses
         const sessionsData = result.data.sessions || [];
         console.log(sessionsData);
         setSessions(sessionsData);
@@ -44,7 +43,6 @@ function Sessions() {
     fetchSessions();
   }, []);
 
-  // Show loading state
   if (isLoading) {
     return (
       <div className="app-container">
@@ -57,7 +55,6 @@ function Sessions() {
     );
   }
 
-  // Show error state
   if (error) {
     return (
       <div className="app-container">
@@ -94,8 +91,7 @@ function Sessions() {
             </div>
           </div>
         </main>
-
-        {/* Footer Component */}
+        
         <footer className="main-footer">
           <div className="footer-content">
             <div className="footer-left">

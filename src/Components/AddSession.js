@@ -1,5 +1,3 @@
-// src/components/AddSession.jsx
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import "./AddSession.css";
@@ -47,7 +45,9 @@ const DynamicInputGroup = ({
             </option>
           ))
         ) : (
-          <option value="" disabled>No exercises available</option>
+          <option value="" disabled>
+            No exercises available
+          </option>
         )}
       </select>
       <input
@@ -68,7 +68,7 @@ function AddSession() {
     date: "",
     exercises: [{ targetMuscle: "", exerciseId: "", weight: "" }],
   });
-  const [exercisesList, setExercisesList] = useState([]);
+  const [exercisesLists, setExercisesLists] = useState({}); // Changed to object to store lists per exercise
   const [isLoading, setIsLoading] = useState(false);
   const { memberId } = useParams();
   const token = localStorage.getItem("authToken");
@@ -76,22 +76,25 @@ function AddSession() {
   // Fetch exercises when targetMuscle changes
   const getExercisesByMuscleGroup = async (muscleGroup) => {
     if (!muscleGroup) return [];
-    
+
     try {
-      const response = await fetch(`http://localhost:7900/api/exercises/getExrecises/${muscleGroup}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      const response = await fetch(
+        `http://localhost:7900/api/exercises/getExrecises/${muscleGroup}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch exercises.");
       }
 
       const result = await response.json();
-      console.log(result.data.exercises)
+      console.log(result.data.exercises);
       return result.data.exercises || [];
     } catch (err) {
       console.error("Error fetching exercises:", err);
@@ -105,21 +108,26 @@ function AddSession() {
     const newExercises = [...sessionData.exercises];
     newExercises[index].targetMuscle = value;
     newExercises[index].exerciseId = ""; // Reset exercise selection
-    
+
     setSessionData((prevData) => ({
       ...prevData,
       exercises: newExercises,
     }));
 
-    // Fetch exercises for the selected muscle group
+    // Fetch exercises for the selected muscle group and store it for this specific exercise
     if (value) {
       const exercises = await getExercisesByMuscleGroup(value);
-      setExercisesList(exercises);
+      setExercisesLists((prev) => ({
+        ...prev,
+        [index]: exercises,
+      }));
     } else {
-      setExercisesList([]);
+      setExercisesLists((prev) => ({
+        ...prev,
+        [index]: [],
+      }));
     }
   };
-
 
   const handleSessionDataChange = (e) => {
     const { name, value } = e.target;
@@ -141,13 +149,13 @@ function AddSession() {
 
   const handleDynamicInputChange = (index, e) => {
     const { name, value } = e.target;
-    
+
     // Special handling for targetMuscle changes
     if (name === "targetMuscle") {
       handleMuscleGroupChange(index, e);
       return;
     }
-    
+
     const newExercises = [...sessionData.exercises];
     newExercises[index][name] = value;
     setSessionData((prevData) => ({
@@ -158,37 +166,37 @@ function AddSession() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    
-    // Format data according to API requirements
     const apiData = {
       memberId: parseInt(memberId),
       duration: parseInt(sessionData.duration),
       date: sessionData.date,
-      exercises: sessionData.exercises.map(exercise => ({
+      exercises: sessionData.exercises.map((exercise) => ({
         exerciseId: exercise.exerciseId,
-        weight: parseInt(exercise.weight)
-      }))
+        weight: parseInt(exercise.weight),
+      })),
     };
-    
+
     try {
-      const response = await fetch("http://localhost:7900/api/sessions/addSession", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(apiData),
-      });
-      
+      const response = await fetch(
+        "http://localhost:7900/api/sessions/addSession",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(apiData),
+        }
+      );
+
       if (!response.ok) {
         throw new Error("Failed to save session");
       }
-      
+
       const result = await response.json();
       console.log("Session saved successfully:", result);
       alert("Session saved successfully");
-      
-      // Reset form
+
       setSessionData({
         duration: "",
         date: "",
@@ -224,17 +232,6 @@ function AddSession() {
           <form onSubmit={handleSave} className="add-session-form">
             <div className="top-inputs">
               <div className="form-group">
-                {/* <label className="form-label">Gym member Name</label>
-                <input
-                  type="text"
-                  name="memberName"
-                  value={sessionData.memberName}
-                  onChange={handleSessionDataChange}
-                  className="form-input"
-                  required
-                /> */}
-              </div>
-              <div className="form-group">
                 <label className="form-label">Duration (min)</label>
                 <input
                   type="number"
@@ -268,7 +265,7 @@ function AddSession() {
                   exercise={exercise}
                   handleInputChange={handleDynamicInputChange}
                   index={index}
-                  exercisesList={exercisesList}
+                  exercisesList={exercisesLists[index] || []}
                 />
               ))}
               <button
@@ -339,6 +336,6 @@ function AddSession() {
       </div>
     </div>
   );
-};
+}
 
 export default AddSession;

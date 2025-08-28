@@ -8,28 +8,40 @@ const NavBar = () => {
     <aside className="sidebar">
       <div className="sidebar-logo">
         {/* <div className="logo-placeholder"></div> */}
-        <img className="logo-placeholder" src="logo.jpg"/>
+        <img
+          className="logo-placeholder"
+          src="http://localhost:3000/logo.jpg"
+        />
       </div>
       <nav className="sidebar-nav">
         <ul>
           <li>
             <Link to="/homePost" className="nav-item">
               {/* <span className="nav-icon"></span>Home */}
-              <img className="nav-icon" src="home.jpg"/>Home
+              <img className="nav-icon" src="http://localhost:3000/home.jpg" />
+              Home
             </Link>
           </li>
           {accountType === "Coach" ? (
             <li>
               <Link to="/members" className="nav-item">
                 {/* <span className="nav-icon"></span>Members */}
-                <img className="nav-icon" src="members.jpg"/>Members
+                <img
+                  className="nav-icon"
+                  src="http://localhost:3000/members.jpg"
+                />
+                Members
               </Link>
             </li>
           ) : accountType === "GymMember" && memberId ? (
             <li>
               <Link to={`/profile/${memberId}`} className="nav-item">
                 {/* <span className="nav-icon"></span>Profile */}
-                <img className="nav-icon" src="profile.jpg"/>Profile
+                <img
+                  className="nav-icon"
+                  src="http://localhost:3000/profile.jpg"
+                />
+                Profile
               </Link>
             </li>
           ) : null}
@@ -41,7 +53,11 @@ const NavBar = () => {
           <li>
             <Link to="/sessions" className="nav-item">
               {/* <span className="nav-icon"></span>Sessions */}
-              <img className="nav-icon" src="sessions.jpg"/>Sessions
+              <img
+                className="nav-icon"
+                src="http://localhost:3000/sessions.jpg"
+              />
+              Sessions
             </Link>
           </li>
           {/* <li>

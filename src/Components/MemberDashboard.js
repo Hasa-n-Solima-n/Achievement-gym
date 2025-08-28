@@ -23,27 +23,32 @@ const MemberDashboard = () => {
   const [progressData, setProgressData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const token=localStorage.getItem("authToken");
-      const {memberId}=useParams();
+  const token = localStorage.getItem("authToken");
+  const { memberId } = useParams();
 
   // Function to fetch member data and exercises from the API
   const fetchMemberData = async () => {
-
     try {
-      const memberResponse = await fetch(`http://localhost:7900/api/profiles/getMemberInfo/${memberId}`,{
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const exercisesResponse = await fetch(`http://localhost:7900/api/exercises/getProgressExercises/${memberId}`,{
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const memberResponse = await fetch(
+        `http://localhost:7900/api/profiles/getMemberInfo/${memberId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const exercisesResponse = await fetch(
+        `http://localhost:7900/api/exercises/getProgressExercises/${memberId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!memberResponse.ok || !exercisesResponse.ok) {
         throw new Error("Failed to fetch data");
@@ -66,15 +71,18 @@ const MemberDashboard = () => {
   const fetchProgressData = async (exerciseId) => {
     setIsLoading(true);
     try {
-      console.log(memberId,exerciseId);
+      console.log(memberId, exerciseId);
       // Fetch progress data from the API based on the selected exerciseId
-      const progressResponse = await fetch(`http://localhost:7900/api/profiles/getProgressData/${memberId}/${exerciseId}`,{
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const progressResponse = await fetch(
+        `http://localhost:7900/api/profiles/getProgressData/${memberId}/${exerciseId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (!progressResponse.ok) {
         throw new Error("Failed to fetch progress data.");
       }
@@ -126,7 +134,7 @@ const MemberDashboard = () => {
           <div className="left-panel">
             <h2 className="panel-title">Member Info</h2>
             <div className="member-info-card">
-              <div className="member-image-container">
+              <div className="member-image-container-dash">
                 <img
                   src={getImageUrl(memberInfo?.imageUrl)}
                   alt="Member"
@@ -140,9 +148,7 @@ const MemberDashboard = () => {
               <h3 className="member-name">
                 {memberInfo?.firstName} {memberInfo?.lastName}
               </h3>
-              <p className="member-bio">
-                {memberInfo?.bio}
-              </p>
+              <p className="member-bio">{memberInfo?.bio}</p>
               <div className="contact-info">
                 <p>
                   <i className="fas fa-phone"></i> {memberInfo?.phoneNumber}
