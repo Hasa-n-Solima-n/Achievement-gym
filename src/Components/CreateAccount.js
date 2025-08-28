@@ -1,10 +1,8 @@
 // src/components/CreateAccount.jsx
 
 import React, { useState, useEffect } from "react";
-import "./CreateAccount.css"; 
+import "./CreateAccount.css";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
-
 
 const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
   <div className="form-content">
@@ -124,7 +122,7 @@ const ProfileInfoStep2 = ({
   const [coaches, setCoaches] = useState([]);
   const [loadingCoaches, setLoadingCoaches] = useState(false);
   const [coachesError, setCoachesError] = useState("");
-  
+
   useEffect(() => {
     let isCancelled = false;
     const fetchCoaches = async () => {
@@ -133,12 +131,17 @@ const ProfileInfoStep2 = ({
       setLoadingCoaches(true);
       setCoachesError("");
       try {
-        const response = await fetch(`http://localhost:7900/api/profiles/getAllCoaches/${encodeURIComponent(formData.sportType)}`,{
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        });
+        const response = await fetch(
+          `http://localhost:7900/api/profiles/getAllCoaches/${encodeURIComponent(
+            formData.sportType
+          )}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          }
+        );
         if (!response.ok) throw new Error("Failed to load coaches");
         const data = await response.json();
         const list = data && data.data;
@@ -276,7 +279,9 @@ const ProfileInfoStep2 = ({
                 ))}
             </select>
             {coachesError && (
-              <span style={{ color: "#e74c3c", display: "block", marginTop: 6 }}>
+              <span
+                style={{ color: "#e74c3c", display: "block", marginTop: 6 }}
+              >
                 {coachesError}
               </span>
             )}
@@ -311,7 +316,7 @@ function CreateAccount() {
     bio: "",
     image: null,
     accountType: "Coach",
-    coachId: "",
+    coachId: "", // Keep as empty string
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -347,25 +352,27 @@ function CreateAccount() {
       return;
     }
 
-    const payload = {
-      accountType: formData.accountType,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      bio: formData.bio,
-      phoneNumber: formData.phone,
-      email: formData.email,
-      password: formData.password,
-      sportType: formData.sportType,
-      // imageUrl: "",
-      ...(formData.accountType === "GymMember" ? { coachId: formData.coachId } : {}),
-    };
+    const formDataToSend = new FormData();
+    formDataToSend.append("accountType", formData.accountType);
+    formDataToSend.append("firstName", formData.firstName);
+    formDataToSend.append("lastName", formData.lastName);
+    formDataToSend.append("bio", formData.bio);
+    formDataToSend.append("phoneNumber", formData.phone);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
+    formDataToSend.append("sportType", formData.sportType);
+    if (formData.image) {
+      formDataToSend.append("imageUrl", formData.image);
+    }
+    if (formData.accountType === "GymMember") {
+      formDataToSend.append("coachId", parseInt(formData.coachId) || 0);
+    }
 
     try {
       setSubmitting(true);
       const response = await fetch("http://localhost:7900/api/users/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formDataToSend, // Remove Content-Type header for FormData
       });
 
       const contentType = response.headers.get("content-type") || "";
@@ -373,7 +380,8 @@ function CreateAccount() {
       const data = isJson ? await response.json() : null;
 
       if (!response.ok) {
-        const apiMessage = data && (data.message || data.error || data.errors?.[0]?.msg);
+        const apiMessage =
+          data && (data.message || data.error || data.errors?.[0]?.msg);
         throw new Error(apiMessage || `Signup failed (${response.status})`);
       }
 
