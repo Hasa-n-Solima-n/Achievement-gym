@@ -8,27 +8,31 @@ const SessionData = ({ memberName }) => {
   const [sessionData, setSessionData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const { sessionId } = useParams();
 
   useEffect(() => {
     const fetchSessionData = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch(`http://localhost:7900/api/sessions/getSession/${sessionId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        });
+        const response = await fetch(
+          `http://localhost:7900/api/sessions/getSession/${sessionId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+          }
+        );
         console.log(response.status);
-
         if (!response.ok) {
           throw new Error("Failed to fetch session data.");
         }
 
         const result = await response.json();
         setSessionData(result.data);
+        console.log(result.data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -70,6 +74,49 @@ const SessionData = ({ memberName }) => {
     return `${minutes}min`;
   };
 
+  // Function to toggle session status
+  const toggleSessionStatus = async () => {
+    if (isUpdating || !sessionData) return;
+
+    setIsUpdating(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      const newStatus =
+        sessionData.status === "Panding" ? "Complited" : "Panding";
+
+      const response = await fetch(
+        "http://localhost:7900/api/sessions/updateSessionStatus",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            memberId: sessionData.memberId,
+            sessionId: parseInt(sessionId),
+            status: newStatus,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update session status");
+      }
+
+      // Update local state
+      setSessionData((prev) => ({
+        ...prev,
+        status: newStatus,
+      }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsUpdating(false);
+      console.log(sessionData);
+    }
+  };
+
   return (
     <div className="app-container">
       <NavBar />
@@ -79,10 +126,16 @@ const SessionData = ({ memberName }) => {
           <div className="sessions-content">
             <div className="session-card">
               <div className="card-header">
-                <h3 className="member-name">{sessionData.memberName || memberName || ""}</h3>
-                <span className={`session-status ${status.toLowerCase()}`}>
-                  {status}
-                </span>
+                <h3 className="member-name">
+                  {sessionData.memberName || memberName || ""}
+                </h3>
+                <button
+                  className={`session-status-button ${status.toLowerCase()}`}
+                  onClick={toggleSessionStatus}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? "Updating..." : status}
+                </button>
               </div>
               <div className="card-details">
                 <div className="detail-item">
@@ -103,7 +156,9 @@ const SessionData = ({ memberName }) => {
                   {exercises.length > 0 ? (
                     exercises.map((exercise) => (
                       <div className="table-row" key={exercise.exerciseId}>
-                        <div className="table-cell">{exercise.exerciseName}</div>
+                        <div className="table-cell">
+                          {exercise.exerciseName}
+                        </div>
                         <div className="table-cell">{exercise.weight}</div>
                       </div>
                     ))

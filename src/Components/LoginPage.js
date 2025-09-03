@@ -10,7 +10,7 @@ const LoginPage = () => {
   const [accountType, setAccountType] = useState("gymMember");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-
+  const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     console.log("LoginPage component mounted");
   }, []);
@@ -117,16 +117,38 @@ const LoginPage = () => {
           <label htmlFor="password-input" className="input-label">
             Password
           </label>
-          <input
-            type="password"
-            id="password-input"
-            placeholder="*******"
-            className="login-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-          />
+          <div style={{ position: "relative" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password-input"
+              placeholder="*******"
+              className="login-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+              style={{ paddingRight: "40px" }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              style={{
+                position: "absolute",
+                right: "8px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                fontSize: "1rem",
+              }}
+              tabIndex={-1}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
 
           <label htmlFor="accountType-input" className="input-label">
             Account Type
@@ -144,7 +166,7 @@ const LoginPage = () => {
             <option value="Coach">Coach</option>
           </select>
 
-          {error && <div className="error-message">{`${error}...!`}</div>}
+          {error && <div className="error-messageL">{`${error}...!`}</div>}
 
           <Link to="/Forgot" className="forgot-password">
             Forgot Password?

@@ -165,7 +165,7 @@ body {
     font-size: 0.9em;
     color: var(--secondary-text-color);
     text-decoration: none;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     margin-top: 15px;
     transition: color 0.3s ease;
 }
@@ -255,9 +255,9 @@ body {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-.error-message {
+.error-messageL {
     color: #d9534f;
     font-size: 0.9em;
-    margin-top: 0.5rem;
+    padding: 15px;
     text-align: center;
 }

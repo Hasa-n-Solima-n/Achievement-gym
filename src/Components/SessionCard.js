@@ -4,7 +4,7 @@ import "./Sessions.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const SessionCard = ({ session }) => {
-  const isCompleted = session.status === "Completed";
+  const isCompleted = session.status === "Complited";
   const statusClass = isCompleted ? "Completed" : "Pending";
 
   const formatDuration = (minutes) => {
@@ -29,7 +29,9 @@ const SessionCard = ({ session }) => {
       <div className="session-card">
         <div className="card-header">
           <div className="member-info">
-            <span className="member-name">{session.memberName || "Hasan Soliman"}</span>
+            <span className="member-name">
+              {session.memberName || "Hasan Soliman"}
+            </span>
             <p className="target-muscles">{session.targetMuscles.join(", ")}</p>
           </div>
           <div className={`status-circle-${statusClass}`}></div>

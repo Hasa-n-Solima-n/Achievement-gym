@@ -13,7 +13,6 @@ import Sessions from "./Components/Sessions";
 import MembersPage from "./Components/MembersPage";
 import MemberDashboard from "./Components/MemberDashboard";
 import SessionData from "./Components/SessionData";
-// import SessionData from "./Components/SessionData";
 
 const App = () => {
   return (
