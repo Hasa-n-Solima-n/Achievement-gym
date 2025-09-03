@@ -384,7 +384,7 @@ function CreateAccount() {
           data && (data.message || data.error || data.errors?.[0]?.msg);
         throw new Error(apiMessage || `Signup failed (${response.status})`);
       }
-
+      navigate.push("/login");
       alert("Account created successfully");
       setStep(1);
       setFormData((prev) => ({

@@ -19,6 +19,17 @@ const App = () => {
   return (
     <BrowserRouter>
       <Switch>
+        {localStorage.getItem("authToken") && (
+          <Route exact path="/">
+            <Sessions />
+          </Route>
+        )}
+        {!localStorage.getItem("authToken") && (
+          <Route exact path="/">
+            <LoginPage />
+          </Route>
+        )}
+
         <Route exact path="/login">
           <LoginPage />
         </Route>
@@ -41,7 +52,7 @@ const App = () => {
           <Sessions />
         </Route>
         <Route exact path="/SessionData/:sessionId">
-          <SessionData/>
+          <SessionData />
         </Route>
         <Route exact path="/members">
           <MembersPage />

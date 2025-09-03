@@ -68,7 +68,7 @@ const ResetPassword = () => {
     <div className="reset-password-container">
       <div className="reset-password-image-section">
         <img
-          src="path/to/your/image.jpg"
+          src="http://localhost:3000/photo_2025-08-01_16-49-36.jpg"
           alt="Workout"
           className="reset-password-hero-image"
         />
@@ -137,8 +137,8 @@ const ResetPassword = () => {
 
             {error && <div className="error-message">{error}</div>}
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="save-button"
               disabled={isSubmitting}
             >
