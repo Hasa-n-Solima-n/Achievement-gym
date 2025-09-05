@@ -4,7 +4,15 @@ import React, { useState, useEffect } from "react";
 import "./CreateAccount.css";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
+const AccountInfoStep = ({
+  nextStep,
+  formData,
+  handleChange,
+  showPassword,
+  setShowPassword,
+  showConfirmPassword,
+  setShowConfirmPassword,
+}) => (
   <div className="form-content">
     <h2 className="form-title">Create Account</h2>
     <p className="form-subtitle">First, tell us about yourself.</p>
@@ -76,32 +84,78 @@ const AccountInfoStep = ({ nextStep, formData, handleChange }) => (
         <label htmlFor="password" className="input-label">
           Password
         </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          className="form-input"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="********"
-          required
-        />
+        <div style={{ position: "relative" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            className="form-input"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="********"
+            autoComplete="new-password"
+            required
+            style={{ paddingRight: "40px" }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            style={{
+              position: "absolute",
+              right: "8px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              fontSize: "1rem",
+            }}
+            tabIndex={-1}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
       </div>
 
       <div className="input-group">
         <label htmlFor="confirmPassword" className="input-label">
           Confirm Password
         </label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          className="form-input"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          placeholder="********"
-          required
-        />
+        <div style={{ position: "relative" }}>
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="********"
+            className="form-input"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            autoComplete="new-password"
+            required
+            style={{ paddingRight: "40px" }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+            style={{
+              position: "absolute",
+              right: "8px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+              fontSize: "1rem",
+            }}
+            tabIndex={-1}
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+          >
+            {showConfirmPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
       </div>
 
       <button type="submit" className="next-button">
@@ -320,6 +374,8 @@ function CreateAccount() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -399,8 +455,10 @@ function CreateAccount() {
         bio: "",
         image: null,
         accountType: "Coach",
-        coachId: 0,
+        coachId: "",
       }));
+      setShowPassword(false);
+      setShowConfirmPassword(false);
     } catch (err) {
       setSubmitError(err.message || "Something went wrong");
     } finally {
@@ -429,6 +487,10 @@ function CreateAccount() {
             nextStep={nextStep}
             formData={formData}
             handleChange={handleChange}
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+            showConfirmPassword={showConfirmPassword}
+            setShowConfirmPassword={setShowConfirmPassword}
           />
         ) : (
           <ProfileInfoStep2
