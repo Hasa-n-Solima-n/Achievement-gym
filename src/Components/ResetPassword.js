@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "./ResetPassword.css";
+const REACT_APP_MY_URL = process.env.REACT_APP_MY_URL;
+const photo = REACT_APP_MY_URL + "/photo_2025-08-01_16-49-36.jpg";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -9,6 +11,8 @@ const ResetPassword = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const history = useHistory();
+  const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
   };
@@ -19,7 +23,7 @@ const ResetPassword = () => {
 
   const handleSaveClick = async (e) => {
     e.preventDefault();
-    
+
     // التحقق من تطابق كلمات المرور
     if (newPassword !== reEnterPassword) {
       setError("The Passwords you entered doesn't match");
@@ -36,16 +40,19 @@ const ResetPassword = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:7900/api/users/resetpassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          password: newPassword,
-          token: token
-        }),
-      });
+      const response = await fetch(
+        `${REACT_APP_API_URL}/api/users/resetpassword`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            password: newPassword,
+            token: token,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -67,11 +74,7 @@ const ResetPassword = () => {
   return (
     <div className="reset-password-container">
       <div className="reset-password-image-section">
-        <img
-          src="http://localhost:3000/photo_2025-08-01_16-49-36.jpg"
-          alt="Workout"
-          className="reset-password-hero-image"
-        />
+        <img src={photo} alt="Workout" className="reset-password-hero-image" />
       </div>
       <div className="reset-password-form-section">
         <div className="header-button">

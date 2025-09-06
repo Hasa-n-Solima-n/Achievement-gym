@@ -25,12 +25,13 @@ const MemberDashboard = () => {
   const [error, setError] = useState(null);
   const token = localStorage.getItem("authToken");
   const { memberId } = useParams();
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
   // Function to fetch member data and exercises from the API
   const fetchMemberData = async () => {
     try {
       const memberResponse = await fetch(
-        `http://localhost:7900/api/profiles/getMemberInfo/${memberId}`,
+        `${REACT_APP_API_URL}/api/profiles/getMemberInfo/${memberId}`,
         {
           method: "GET",
           headers: {
@@ -40,7 +41,7 @@ const MemberDashboard = () => {
         }
       );
       const exercisesResponse = await fetch(
-        `http://localhost:7900/api/exercises/getProgressExercises/${memberId}`,
+        `${REACT_APP_API_URL}/api/exercises/getProgressExercises/${memberId}`,
         {
           method: "GET",
           headers: {
@@ -74,7 +75,7 @@ const MemberDashboard = () => {
       console.log(memberId, exerciseId);
       // Fetch progress data from the API based on the selected exerciseId
       const progressResponse = await fetch(
-        `http://localhost:7900/api/profiles/getProgressData/${memberId}/${exerciseId}`,
+        `${REACT_APP_API_URL}/api/profiles/getProgressData/${memberId}/${exerciseId}`,
         {
           method: "GET",
           headers: {
@@ -120,8 +121,8 @@ const MemberDashboard = () => {
 
   const getImageUrl = (path) => {
     // This function can be used to construct the full image URL.
-    const baseApiUrl = "http://localhost:7900/"; // Replace with your base API URL
-    if (!path) return "http://localhost:7900/uploads/avatar.jpg";
+    const baseApiUrl = `${REACT_APP_API_URL}/`; // Replace with your base API URL
+    if (!path) return `${REACT_APP_API_URL}/uploads/avatar.jpg`;
     return `${baseApiUrl}${path.replace(/\\/g, "/")}`;
   };
 

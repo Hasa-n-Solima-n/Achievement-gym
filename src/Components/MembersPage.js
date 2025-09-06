@@ -4,6 +4,7 @@ import "./MembersPage.css";
 import "./HomePost.css";
 import NavBar from "./UI/NavBar";
 import Header from "./UI/Header";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 const MembersPage = () => {
   const [members, setMembers] = useState([]);
@@ -15,7 +16,7 @@ const MembersPage = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          "http://localhost:7900/api/profiles/getMyMembers",
+          `${REACT_APP_API_URL}/api/profiles/getMyMembers`,
           {
             method: "GET",
             headers: {

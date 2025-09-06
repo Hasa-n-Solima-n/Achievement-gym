@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import "./CreateAccount.css";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 const AccountInfoStep = ({
   nextStep,
@@ -186,7 +187,7 @@ const ProfileInfoStep2 = ({
       setCoachesError("");
       try {
         const response = await fetch(
-          `http://localhost:7900/api/profiles/getAllCoaches/${encodeURIComponent(
+          `${REACT_APP_API_URL}/api/profiles/getAllCoaches/${encodeURIComponent(
             formData.sportType
           )}`,
           {
@@ -426,7 +427,7 @@ function CreateAccount() {
 
     try {
       setSubmitting(true);
-      const response = await fetch("http://localhost:7900/api/users/signup", {
+      const response = await fetch(`${REACT_APP_API_URL}/api/users/signup`, {
         method: "POST",
         body: formDataToSend, // Remove Content-Type header for FormData
       });

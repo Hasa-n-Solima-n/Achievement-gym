@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../MembersPage.css";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 const MemberCard = ({ member }) => {
   const { memberId, firstName, lastName, imageUrl } = member;
@@ -8,7 +9,7 @@ const MemberCard = ({ member }) => {
   const getImageUrl = (path) => {
     if (!path) return "uploads/avatar.jpg";
     // if (/^https?:\/\//i.test(path)) return path;
-    const baseStaticUrl = "http://localhost:7900/"; // adjust if your static base differs
+    const baseStaticUrl = `${REACT_APP_API_URL}/`; // adjust if your static base differs
     return `${baseStaticUrl}${path.replace(/\\/g, "/")}`;
   };
 
@@ -26,8 +27,7 @@ const MemberCard = ({ member }) => {
             onError={(e) => {
               // Fallback to a placeholder image on error
               e.target.onerror = null; // prevents infinite loop
-              e.target.src =
-                "http://localhost:7900/uploads/avatar.jpg";
+              e.target.src = `${REACT_APP_API_URL}/uploads/avatar.jpg`;
             }}
           />
         </div>

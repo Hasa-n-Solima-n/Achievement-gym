@@ -1,5 +1,8 @@
 import React from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+const REACT_APP_MY_URL = process.env.REACT_APP_MY_URL;
+const logoutIcon = REACT_APP_MY_URL + "/LogOUt.jpg";
+const logo = REACT_APP_MY_URL + "/logo.jpg";
 
 const Header = () => {
   const navigate = useHistory();
@@ -22,7 +25,7 @@ const Header = () => {
       </div>
       <div className="header-actions">
         <img
-          src="http://localhost:3000/LogOUt.jpg"
+          src={logoutIcon}
           alt="Logout"
           onClick={handleLogout}
           style={{
@@ -36,11 +39,7 @@ const Header = () => {
         />
         {/* <button className="logout-button">Logout</button> */}
         {/* <div className="header-avatar"></div> */}
-        <img
-          className="header-avatar"
-          src="http://localhost:3000/logo.jpg"
-          alt="A"
-        />
+        <img className="header-avatar" src={logo} alt="A" />
       </div>
     </header>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "./LoginPage.css";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 const LoginPage = () => {
   const navigate = useHistory();
@@ -40,7 +41,7 @@ const LoginPage = () => {
 
     try {
       // ** Code for real API integration **
-      const response = await fetch("http://localhost:7900/api/users/signin", {
+      const response = await fetch(`${REACT_APP_API_URL}/api/users/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

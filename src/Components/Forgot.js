@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 import "./Forgot.css";
-
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+const REACT_APP_MY_URL = process.env.REACT_APP_MY_URL;
+const photo = REACT_APP_MY_URL + "/photo_2025-08-01_16-49-36.jpg";
 const Forgot = () => {
   const [email, setEmail] = useState("");
   const [accountType, setAccountType] = useState("");
@@ -17,13 +19,16 @@ const Forgot = () => {
     console.log("Email:", email);
     console.log("Account Type:", accountType);
     
-    const response = await fetch("http://localhost:7900/api/users/forgetpassword", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, accountType }),
-    });
+    const response = await fetch(
+      `${REACT_APP_API_URL}/api/users/forgetpassword`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, accountType }),
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       console.log("Response:", data.success);
@@ -37,7 +42,7 @@ const Forgot = () => {
     <div className="reset-password-container">
       <div className="reset-password-image-section">
         <img
-          src="http://localhost:3000/photo_2025-08-01_16-49-36.jpg"
+          src={photo}
           alt="Workout"
           className="reset-password-hero-image"
         />

@@ -4,6 +4,7 @@ import SessionCard from "./SessionCard";
 import "./Sessions.css";
 import Header from "./UI/Header";
 import NavBar from "./UI/NavBar";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 function Sessions() {
   const [sessions, setSessions] = useState([]);
@@ -15,7 +16,7 @@ function Sessions() {
       try {
        
         const response = await fetch(
-          "http://localhost:7900/api/sessions/getAllSessions",
+          `${REACT_APP_API_URL}/api/sessions/getAllSessions`,
           {
             method: "GET",
             headers: {

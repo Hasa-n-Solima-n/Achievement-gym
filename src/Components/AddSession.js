@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import "./AddSession.css";
 import NavBar from "./UI/NavBar";
 import Header from "./UI/Header";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 const DynamicInputGroup = ({
   exercise,
@@ -79,7 +80,7 @@ function AddSession() {
 
     try {
       const response = await fetch(
-        `http://localhost:7900/api/exercises/getExrecises/${muscleGroup}`,
+        `${REACT_APP_API_URL}/api/exercises/getExrecises/${muscleGroup}`,
         {
           method: "GET",
           headers: {
@@ -178,7 +179,7 @@ function AddSession() {
 
     try {
       const response = await fetch(
-        "http://localhost:7900/api/sessions/addSession",
+        `${REACT_APP_API_URL}/api/sessions/addSession`,
         {
           method: "POST",
           headers: {

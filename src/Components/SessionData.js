@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import "./SessionData.css";
 import Header from "./UI/Header";
 import NavBar from "./UI/NavBar";
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 const SessionData = ({ memberName }) => {
   const [sessionData, setSessionData] = useState(null);
@@ -16,7 +17,7 @@ const SessionData = ({ memberName }) => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          `http://localhost:7900/api/sessions/getSession/${sessionId}`,
+          `${REACT_APP_API_URL}/api/sessions/getSession/${sessionId}`,
           {
             method: "GET",
             headers: {
@@ -85,7 +86,7 @@ const SessionData = ({ memberName }) => {
         sessionData.status === "Panding" ? "Complited" : "Panding";
 
       const response = await fetch(
-        "http://localhost:7900/api/sessions/updateSessionStatus",
+        `${REACT_APP_API_URL}/api/sessions/updateSessionStatus`,
         {
           method: "PATCH",
           headers: {

@@ -1,6 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+const REACT_APP_MY_URL = process.env.REACT_APP_MY_URL;
+const logo = REACT_APP_MY_URL + "/logo.jpg";
+const homeIcon = REACT_APP_MY_URL + "/home.jpg";
+const membersIcon = REACT_APP_MY_URL + "/members.jpg";
+const profileIcon = REACT_APP_MY_URL + "/profile.jpg";
+const sessionsIcon = REACT_APP_MY_URL + "/sessions.jpg";
 const NavBar = () => {
   const accountType = localStorage.getItem("accountType");
   const memberId = localStorage.getItem("memberId");
@@ -8,17 +13,14 @@ const NavBar = () => {
     <aside className="sidebar">
       <div className="sidebar-logo">
         {/* <div className="logo-placeholder"></div> */}
-        <img
-          className="logo-placeholder"
-          src="http://localhost:3000/logo.jpg"
-        />
+        <img className="logo-placeholder" src={logo} />
       </div>
       <nav className="sidebar-nav">
         <ul>
           <li>
             <Link to="/homePost" className="nav-item">
               {/* <span className="nav-icon"></span>Home */}
-              <img className="nav-icon" src="http://localhost:3000/home.jpg" />
+              <img className="nav-icon" src={homeIcon} />
               Home
             </Link>
           </li>
@@ -26,10 +28,7 @@ const NavBar = () => {
             <li>
               <Link to="/members" className="nav-item">
                 {/* <span className="nav-icon"></span>Members */}
-                <img
-                  className="nav-icon"
-                  src="http://localhost:3000/members.jpg"
-                />
+                <img className="nav-icon" src={membersIcon} />
                 Members
               </Link>
             </li>
@@ -37,10 +36,7 @@ const NavBar = () => {
             <li>
               <Link to={`/profile/${memberId}`} className="nav-item">
                 {/* <span className="nav-icon"></span>Profile */}
-                <img
-                  className="nav-icon"
-                  src="http://localhost:3000/profile.jpg"
-                />
+                <img className="nav-icon" src={profileIcon} />
                 Profile
               </Link>
             </li>
@@ -55,7 +51,7 @@ const NavBar = () => {
               {/* <span className="nav-icon"></span>Sessions */}
               <img
                 className="nav-icon"
-                src="http://localhost:3000/sessions.jpg"
+                src={sessionsIcon}
               />
               Sessions
             </Link>
