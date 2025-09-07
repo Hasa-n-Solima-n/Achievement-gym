@@ -6,12 +6,12 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 const MemberCard = ({ member }) => {
   const { memberId, firstName, lastName, imageUrl } = member;
 
-  const getImageUrl = (path) => {
-    if (!path) return `${REACT_APP_API_URL}/uploads/avatar.jpg`;
-    return path;
-  };
+  // const getImageUrl = (path) => {
+  //   if (!path) return `${REACT_APP_API_URL}/uploads/avatar.jpg`;
+  //   return path;
+  // };
 
-  const fullImageUrl = getImageUrl(imageUrl);
+  // const fullImageUrl = getImageUrl(imageUrl);
   const fullName = `${firstName} ${lastName}`;
   
   return (
@@ -19,7 +19,7 @@ const MemberCard = ({ member }) => {
       <div className="member-card">
         <div className="member-image-container">
           <img
-            src={fullImageUrl}
+            src={imageUrl}
             alt={fullName}
             className="member-image"
             onError={(e) => {
