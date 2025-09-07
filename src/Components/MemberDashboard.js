@@ -120,8 +120,15 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
   }
 
   const getImageUrl = (path) => {
-    if (!path) return `${REACT_APP_API_URL}/uploads/avatar.jpg`;
-    return path;
+ if (!path) {
+   // صورة افتراضية لو مافي صورة
+   return `${process.env.REACT_APP_API_URL}/uploads/avatar.jpg`;
+ }
+
+ if (path.startsWith("http")) {
+   // لو الرابط Cloudinary (أو أي رابط خارجي) رجّعه كما هو
+   return path;
+ }
   };
 
   return (

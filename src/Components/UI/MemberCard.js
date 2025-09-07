@@ -13,13 +13,23 @@ const MemberCard = ({ member }) => {
 
   // const fullImageUrl = getImageUrl(imageUrl);
   const fullName = `${firstName} ${lastName}`;
-  
+  const getImageUrl = (path) => {
+    if (!path) {
+      // صورة افتراضية لو مافي صورة
+      return `${process.env.REACT_APP_API_URL}/uploads/avatar.jpg`;
+    }
+
+    if (path.startsWith("http")) {
+      // لو الرابط Cloudinary (أو أي رابط خارجي) رجّعه كما هو
+      return path;
+    }
+  };
   return (
     <Link to={`/profile/${memberId}`} className="member-card-link">
       <div className="member-card">
         <div className="member-image-container">
           <img
-            src={imageUrl}
+            src={getImageUrl(imageUrl)}
             alt={fullName}
             className="member-image"
             onError={(e) => {
