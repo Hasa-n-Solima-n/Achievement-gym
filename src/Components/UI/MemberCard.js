@@ -7,10 +7,8 @@ const MemberCard = ({ member }) => {
   const { memberId, firstName, lastName, imageUrl } = member;
 
   const getImageUrl = (path) => {
-    if (!path) return "uploads/avatar.jpg";
-    // if (/^https?:\/\//i.test(path)) return path;
-    const baseStaticUrl = `${REACT_APP_API_URL}/`; // adjust if your static base differs
-    return `${baseStaticUrl}${path.replace(/\\/g, "/")}`;
+    if (!path) return `${REACT_APP_API_URL}/uploads/avatar.jpg`;
+    return path;
   };
 
   const fullImageUrl = getImageUrl(imageUrl);
@@ -27,7 +25,8 @@ const MemberCard = ({ member }) => {
             onError={(e) => {
               // Fallback to a placeholder image on error
               e.target.onerror = null; // prevents infinite loop
-              e.target.src = `${REACT_APP_API_URL}/uploads/avatar.jpg`;
+              e.target.src =
+                "https://placehold.co/100x100/A0A0A0/ffffff?text=User";
             }}
           />
         </div>

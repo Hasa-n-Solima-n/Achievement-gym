@@ -120,10 +120,8 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
   }
 
   const getImageUrl = (path) => {
-    // This function can be used to construct the full image URL.
-    const baseApiUrl = `${REACT_APP_API_URL}/`; // Replace with your base API URL
     if (!path) return `${REACT_APP_API_URL}/uploads/avatar.jpg`;
-    return `${baseApiUrl}${path.replace(/\\/g, "/")}`;
+    return path;
   };
 
   return (
