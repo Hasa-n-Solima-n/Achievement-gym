@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../MembersPage.css";
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
-
+  const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+  const REACT_APP_MY_URL = process.env.REACT_APP_MY_URL;
 const MemberCard = ({ member }) => {
   const { memberId, firstName, lastName, imageUrl } = member;
 
@@ -13,17 +13,17 @@ const MemberCard = ({ member }) => {
 
   // const fullImageUrl = getImageUrl(imageUrl);
   const fullName = `${firstName} ${lastName}`;
-  const getImageUrl = (path) => {
-    if (!path) {
-      // صورة افتراضية لو مافي صورة
-      return `${process.env.REACT_APP_API_URL}/uploads/avatar.jpg`;
-    }
-
-    if (path.startsWith("http")) {
-      // لو الرابط Cloudinary (أو أي رابط خارجي) رجّعه كما هو
-      return path;
-    }
-  };
+const getImageUrl = (path) => {
+  if (!path) {
+    // صورة افتراضية لو مافي صورة
+    return `${REACT_APP_MY_URL}/avatar.jpg`;
+  }
+  if (path.startsWith("http")) {
+    // لو الرابط Cloudinary (أو أي رابط خارجي) رجّعه كما هو
+    return path;
+  }
+  return `${REACT_APP_API_URL}/${path}`;
+};
   return (
     <Link to={`/profile/${memberId}`} className="member-card-link">
       <div className="member-card">
