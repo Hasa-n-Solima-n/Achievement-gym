@@ -25,7 +25,7 @@ const MemberDashboard = () => {
   const [error, setError] = useState(null);
   const token = localStorage.getItem("authToken");
   const { memberId } = useParams();
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+  const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
   // Function to fetch member data and exercises from the API
   const fetchMemberData = async () => {
@@ -120,17 +120,15 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
   }
 
   const getImageUrl = (path) => {
- if (!path) {
-   // صورة افتراضية لو مافي صورة
-   return `${process.env.REACT_APP_API_URL}/uploads/avatar.jpg`;
- }
-
- if (path.startsWith("http")) {
-   // لو الرابط Cloudinary (أو أي رابط خارجي) رجّعه كما هو
-   return path;
- }
+    if (!path) {
+      // صورة افتراضية لو مافي صورة
+      return `${REACT_APP_API_URL}/uploads/avatar.jpg`;
+    }
+    if (path.startsWith("http")) {
+      // لو الرابط Cloudinary (أو أي رابط خارجي) رجّعه كما هو
+      return path;
+    }
   };
-
   return (
     <div className="app-container">
       <NavBar />
